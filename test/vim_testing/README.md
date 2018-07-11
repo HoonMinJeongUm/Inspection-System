@@ -1,3 +1,3 @@
-# Function Testing
+# VIM Testing
 
 OpenStack Rally Project
