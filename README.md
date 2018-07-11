@@ -2,7 +2,8 @@
 This repository is our Inspection System
 
 ```
-비상연락처 : 010)3661-2015(팀장-김민욱) / 010)9924-2618(오재욱) / 010)2051-6496 (관리자-홍휘진)                           
+비상연락처 :(팀장-김민욱# delightwook91) / (부팀장-이정인# EffyLee) / (오재욱# KyleOh) /
+            (홍휘진# huisam) / (조윤영# yunyoung0309) / (이중문# MiddleDoorLee) / (김재웅#)
 ```
 
 git commit/push 할 때 꼭 점검하는 습관을 가집시다!!                             
