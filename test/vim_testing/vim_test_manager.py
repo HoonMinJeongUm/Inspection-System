@@ -4,3 +4,9 @@
 
 def vim_test_manager():
     pass
+
+
+def start(tool):
+    if str(tool) == 'rally':
+        pass
+
