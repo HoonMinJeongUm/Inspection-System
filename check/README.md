@@ -2,7 +2,7 @@
 This repository is our check component in Inspection System
 
 ```
-Developer : MinWookKim(delightwook)
+Developer : MinWookKim(delightwook91)
 ```
 
 # Check Component  Architecture
