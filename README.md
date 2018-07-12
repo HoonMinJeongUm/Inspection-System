@@ -5,7 +5,7 @@ This repository is our Inspection System
 ## Member of HoonMinJeongUm
 ```
 팀  장-김민욱@delightwook91 / 오재욱@KyleOh / 이중문@MiddleDoorLee
-부팀장-이정인@EffyLee / 홍휘진@huisam / 조윤영@yunyoung0309 / 이중문@MiddleDoorLee / 김재웅@
+부팀장-이정인@EffyLee / 홍휘진@huisam / 조윤영@yunyoung0309 / 김재웅@
 ```
 
 git commit/push 할 때 꼭 점검하는 습관을 가집시다!!                             
