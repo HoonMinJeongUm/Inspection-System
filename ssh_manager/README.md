@@ -6,4 +6,4 @@ Developer : MinWookKim(delightwook91)
 ```
 
 # SSH Manager  Architecture
-![1](https://user-images.githubusercontent.com/29790067/42616928-79d14f38-859f-11e8-8d05-4a1f7bae0a37.png)
+![1](https://user-images.githubusercontent.com/29790067/42618754-90e393f6-85a5-11e8-8b37-13f652dd04f8.png)
