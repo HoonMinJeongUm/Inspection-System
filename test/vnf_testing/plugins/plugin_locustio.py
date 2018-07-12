@@ -2,3 +2,4 @@
 # plugin_locustio.py
 
 import logging
+LOG = logging.getLogger(__name__)

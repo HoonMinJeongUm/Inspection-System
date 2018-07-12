@@ -10,8 +10,7 @@ def vim_test_manager():
     pass
 
 
-def start(tool, **kwargs):
+def start(tool, requestdict):
     if str(tool) == 'rally':
-        if kwargs.has_key("requestdict"):
-            plugin_rally.start(kwargs["requestdict"])
+        plugin_rally.start(requestdict)
 
