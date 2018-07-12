@@ -2,7 +2,6 @@
 
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/Django.svg)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
-[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
 This repository is our Inspection System
 
