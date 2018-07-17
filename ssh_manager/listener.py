@@ -2,6 +2,7 @@ import fabfile
 import os
 import sys
 import subprocess
+
 # from fabric.api import run,env,execute,task
 
 #
@@ -31,7 +32,7 @@ def start_command():
     output.close()
 
     print("result  Type : : : ", type(result))
-    print("result  : : : ",result)
+    print("result  : : : ",result.decode(encoding="utf-8"))
     print("############################################")
 
 
