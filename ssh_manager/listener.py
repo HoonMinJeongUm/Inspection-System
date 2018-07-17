@@ -1,42 +1,33 @@
 import fabfile
-import os
-import sys
 import subprocess
-
-# from fabric.api import run,env,execute,task
-
-#
-#
-# env.user = 'root'
-# env.password = 'root'
-# env.hosts=['192.168.10.101','192.168.10.102','192.168.10.103']
-
-
 
 def result_parser():
     pass
-def start_command():
+
+def change_hostlist(hosts):
+    return str(hosts).replace(',', '?')
+def change_authlist(auth):
+    return str(auth).replace(',','?')
+
+def start_command(hosts,auth,command):
     """
     For command, use two authentication methods:
     1. Use the host's common user, pwd
     2. Assume that public and private keys are in VM
+    hosts = list
+    auth = list
+    command = string
+    return 'String'
 
     """
-    command = 'uname -a'
 
-
-    # os.system('fab -H 192.168.11.3 -p stack run_ssh')
-    print("############################################")
-    output = subprocess.Popen(['fab','run_ssh:' + command],stdout=subprocess.PIPE).stdout
+    output = subprocess.Popen(['fab','start_ssh:' +command+","+change_hostlist(hosts)+","+change_authlist(auth)],stdout=subprocess.PIPE).stdout
     result = output.read().strip()
     output.close()
-
-    print("result  Type : : : ", type(result))
-    print("result  : : : ",result.decode(encoding="utf-8"))
-    print("############################################")
-
-
+    print("===================================================================")
+    print(result.decode(encoding="utf-8"))
+    print("===================================================================")
 def start_script():
     pass
 
-start_command()
+start_command(['192.168.11.3','192.168.11.31'],['stack','stack'],'uname -a')
