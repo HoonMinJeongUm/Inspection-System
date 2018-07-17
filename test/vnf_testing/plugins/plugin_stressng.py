@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # plugin_stressng.py
 
+from ssh_manager import listener
 import subprocess
 import logging
 LOG = logging.getLogger(__name__)
@@ -11,11 +12,6 @@ def bash_command(cmd):
     subprocess.Popen(['/bin/bash', '-c', cmd])
 
 
-# Temporary Function for calling
-def start_command(DESTINATION_IP, ID, PASSWORD, COMMAND):
-    pass
-
-
-def start():
+def start(hosts=None, auth=None):
     cmd = 'stress -c 4 --vm 3 --vm-bytes 2048m --hdd 2 --hdd-bytes 1024m'
-    start_command('192.168.11.101', 'ubuntu', 'ubuntu', cmd)
+    listener.start_command(hosts=hosts, auth=auth, command=cmd)

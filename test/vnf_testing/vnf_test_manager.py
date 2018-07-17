@@ -10,8 +10,8 @@ def vnf_test_manager():
     pass
 
 
-def start(tool):
+def start(tool, hosts=None, auth=None):
     if str(tool) == 'locustio':
-        plugin_locustio.start()
+        plugin_locustio.start(hosts, auth)
     elif str(tool) == 'stress-ng':
-        plugin_stressng.start()
+        plugin_stressng.start(hosts, auth)
