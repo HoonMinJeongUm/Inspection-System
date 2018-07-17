@@ -13,6 +13,7 @@ def start_command(hosts,auth,command):
     auth = list
     command = string
     return 'String'
+    # start_command(['192.168.11.3','192.168.11.31'],['stack','stack'],'uname -a') <= TEST Line
 
     """
 
@@ -29,4 +30,4 @@ def start_script():
 def result_parser():
     pass
 
-start_command(['192.168.11.3','192.168.11.31'],['stack','stack'],'uname -a')
+
