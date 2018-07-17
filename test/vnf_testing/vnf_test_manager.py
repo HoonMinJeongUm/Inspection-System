@@ -12,6 +12,6 @@ def vnf_test_manager():
 
 def start(tool):
     if str(tool) == 'locustio':
-        pass
+        plugin_locustio.start()
     elif str(tool) == 'stress-ng':
-        pass
+        plugin_stressng.start()
