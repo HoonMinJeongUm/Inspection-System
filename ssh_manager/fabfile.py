@@ -1,4 +1,4 @@
-from fabric.api import run,env,execute,task,parallel
+from fabric.api import run,env,execute,task,parallel,put
 def result_parser():
     pass
 
@@ -10,7 +10,6 @@ def get_authlist(auth):
     tmpauth = auth.replace('\'','').replace('[','').replace(']','').strip().strip()
     return tmpauth.replace(' ','').split('?')
 
-# @parallel
 def env_setting(hosts,auth):
 
     tmpauth = get_authlist(auth)
@@ -24,15 +23,20 @@ def env_setting(hosts,auth):
 
     env.hosts = get_hostlist(hosts)
 
-# @parallel
 def run_ssh(command):
     run(command)
+
+def run_script(local_path, remote_path,file_name):
+    execute(run_ssh, 'mkdir -p ' + remote_path)
+    put(local_path+'/'+file_name,remote_path+'/'+file_name)
+    execute(run_ssh,'. '+remote_path+'/'+file_name)
 
 @task
 def start_ssh(*args):
     execute(env_setting,args[1],args[2])
     execute(run_ssh,args[0])
 
-
-def run_script():
-    pass
+@task
+def start_script(hosts,auth,local_path,remote_path,file_name):
+    execute(env_setting, hosts,auth)
+    execute(run_script, local_path,remote_path,file_name)
