@@ -16,7 +16,7 @@ def env_setting(hosts,auth):
     tmpauth = get_authlist(auth)
     env.user = tmpauth[0]
 
-    if '\/' in tmpauth[1]:
+    if '/' in tmpauth[1]:
         env.key_filename.append = tmpauth[1]
         print(env.key_filename)
     else :
