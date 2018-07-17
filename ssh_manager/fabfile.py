@@ -1,7 +1,11 @@
-from fabric.api import run
+from fabric.api import run,env,execute,task
 
-def run_ssh():
-    run('ls -al')
+env.user = 'stack'
+env.password = 'stack'
+env.hosts=['192.168.11.3','192.168.11.31']
+
+def run_ssh(command):
+    run(command)
 
 
 def run_script():
