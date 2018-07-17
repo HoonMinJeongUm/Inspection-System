@@ -12,6 +12,11 @@ def bash_command(cmd):
     subprocess.Popen(['/bin/bash', '-c', cmd])
 
 
+# Temporary Function for calling
+def start_command(DESTINATION_IP, ID, PASSWORD, COMMAND):
+    pass
+
+
 def start():
     cmd = 'locust -f locustfile.py'
-    bash_command(cmd)
+    start_command('192.168.9.101', 'ubuntu', 'ubuntu', cmd)

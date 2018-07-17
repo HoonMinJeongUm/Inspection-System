@@ -11,5 +11,11 @@ def bash_command(cmd):
     subprocess.Popen(['/bin/bash', '-c', cmd])
 
 
-def start():
+# Temporary Function for calling
+def start_command(DESTINATION_IP, ID, PASSWORD, COMMAND):
     pass
+
+
+def start():
+    cmd = 'stress -c 4 --vm 3 --vm-bytes 2048m --hdd 2 --hdd-bytes 1024m'
+    start_command('192.168.11.101', 'ubuntu', 'ubuntu', cmd)
