@@ -38,7 +38,7 @@ def start_script(hosts,auth,file_name,local_path,remote_path):
 
     """
 
-    output = subprocess.Popen(['fab','start_script:'+change_mark(hosts)+","+change_mark(auth)
+    output = subprocess.Popen(['fab','-f','~/Inspection-System/ssh_manager/fabfile.py','start_script:'+change_mark(hosts)+","+change_mark(auth)
                                +","+local_path+","+remote_path+","+file_name],
                               stdout=subprocess.PIPE).stdout
     result = output.read().strip()
