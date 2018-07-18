@@ -15,9 +15,10 @@ class CaseManager :
 
 def call_case(case,data):
 
-    case = __import__("cases." + case.lower() +".controller.Client", fromlist=["cases." + case.lower() +".controller"])
+    casemodule = __import__("cases." + case.lower() +".controller",
+                      fromlist=["cases." + case.lower() +".controller"])
 
-    CaseManager.invoke(case,data)
+    CaseManager.invoke(casemodule.Client(),data)
 
 #driver_manager
 
