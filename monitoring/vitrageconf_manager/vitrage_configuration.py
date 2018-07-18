@@ -17,7 +17,7 @@ subprocess.call("echo 'user = admin' >> '%s'" %vitrage_conf, shell=True)
 subprocess.call("echo 'config_file = /etc/vitrage/zabbix_conf.yaml' >> '%s'" %vitrage_conf, shell=True)
 
 #make zabbix_conf.yaml file and add texts
-f = open("%s/zabbix_conf.yaml" %path,'w').close()
+open("%s/zabbix_conf.yaml" %path,'w').close()
 subprocess.call("echo 'zabbix:' >> '%s'" %zabbix_conf, shell=True)
 subprocess.call("echo '- zabbix_host: Zabbix server' >> '%s'" %zabbix_conf, shell=True)
 subprocess.call("echo '  type: nova.host' >> '%s'" %zabbix_conf, shell=True)
