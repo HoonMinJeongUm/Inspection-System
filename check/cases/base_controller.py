@@ -1,7 +1,5 @@
-import abc
-
-
-class AbstractController(metaclass=abc):
-    @staticmethod
-    def execute(data):
+from abc import *
+class BaseController(metaclass=ABCMeta):
+    @abstractmethod
+    def execute(self,data):
         pass
