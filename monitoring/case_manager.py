@@ -1,8 +1,9 @@
 # Monitoring Case_manager
 
 from monitoring_manager.monitoring_manager import MonitoringManager
-from vitrageconf_manager import vitrage_configuration
 import logging
+
+MonitorLog = logging.getLogger("MonitorLog")
 
 
 class MonitoringCaseManager(object):
@@ -14,7 +15,7 @@ class MonitoringCaseManager(object):
             if request['header'] is not 'Monitoring':
                 raise KeyError
         except KeyError:
-            logging.error("Header is wrong. Please check again.")
+            MonitorLog.error("Header is wrong. Please check again.")
         else:
             self.request = request
             if self.request['type'] is 'vitrageconf':
@@ -22,7 +23,7 @@ class MonitoringCaseManager(object):
             elif self.request['type'] is 'management':
                 self.start_management()
             else:
-                logging.warning("Wrong data type. Please rewrite the type.")
+                MonitorLog.warning("Wrong data type. Please rewrite the type.")
 
     def start_vitrageconf(self):
         pass
