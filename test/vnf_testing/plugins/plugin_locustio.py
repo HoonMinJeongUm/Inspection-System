@@ -2,6 +2,7 @@
 # plugin_locustio.py
 
 from locust import HttpLocust, TaskSet, task
+from ssh_manager import listener
 import subprocess
 import logging
 LOG = logging.getLogger(__name__)
@@ -12,11 +13,7 @@ def bash_command(cmd):
     subprocess.Popen(['/bin/bash', '-c', cmd])
 
 
-# Temporary Function for calling
-def start_command(DESTINATION_IP, ID, PASSWORD, COMMAND):
-    pass
-
-
-def start():
+def start(hosts=None, auth=None):
     cmd = 'locust -f locustfile.py'
-    start_command('192.168.9.101', 'ubuntu', 'ubuntu', cmd)
+    # locustfile.py transfer needed
+    listener.start_command(hosts=hosts, auth=auth, command=cmd)

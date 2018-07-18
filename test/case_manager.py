@@ -16,11 +16,11 @@ class CaseManager(object):
     def __init__(self):
         pass
 
-    def start(self, case, tool, requestdict=None):
+    def start(self, case, tool, hosts=None, auth=None, requestdict=None):
         if case not in CASES:
             # Todo : Error Log
             pass
         if str(case) == 'vim':
             vim_test_manager.start(tool, requestdict)
         elif str(case) == 'vnf':
-            vnf_test_manager.start(tool)
+            vnf_test_manager.start(tool, hosts, auth)
