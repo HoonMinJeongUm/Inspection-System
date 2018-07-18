@@ -348,7 +348,11 @@ class VNFMonitorZabbix(abstract_driver.VNFMonitorAbstractDriver):
         self.create_action()
 
     def get_token_from_zbxserver(self, node):
-
+        """
+        token create by zbxserver
+        :param node: node information
+        :return: response result
+        """
         temp_auth_api = copy.deepcopy(zapi.dAUTH_API)
         temp_auth_api['params']['user'] = \
             self.hostinfo[node]['zbx_info']['zabbix_user']

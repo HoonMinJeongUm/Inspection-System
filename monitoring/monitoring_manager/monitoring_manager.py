@@ -1,7 +1,7 @@
 # Use Zabbix Plugin
 # Reference from Openstack Project [ Zabbix Plugin for Application Monitoring in Tacker VNF Manager ]
 
-from ..monitoring_plugin.zabbix_plugin import VNFMonitorZabbix
+from monitoring_plugin.zabbix_plugin import VNFMonitorZabbix
 
 
 class MonitoringManager(VNFMonitorZabbix):

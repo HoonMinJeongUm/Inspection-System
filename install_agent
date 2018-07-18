@@ -1,0 +1,15 @@
+sudo apt-get -y update
+sudo apt-get -y upgrade
+sudo apt-get -y install zabbix-agent
+sudo apt-get -y install apache2
+sudo sed -i "2s/.*/`ifconfig [Interface name in VNF] | grep ""\"inet addr:\"""| cut -d: -f2 | awk ""\"{ print $1 }\"""`/g" "/etc/hosts"
+sudo sed -i "s/Bcast/`cat /etc/hostname`/g" "/etc/hosts"
+sudo sed -i "3s/.*/[Zabbix Host IP Address]	monitor/g" "/etc/hosts"
+sudo /etc/init.d/networking restart
+sudo echo zabbix ALL=NOPASSWD: ALL >> /etc/sudoers
+sudo sed -i "s/# EnableRemoteCommands=0/EnableRemoteCommands=1/" "/etc/zabbix/zabbix_agentd.conf"
+sudo sed -i "s/Hostname=Zabbix server/Hostname=`cat /etc/hostname`/" "/etc/zabbix/zabbix_agentd.conf"
+sudo service apache2 restart
+sudo service zabbix-agent restart
+sudo echo ubuntu:ubuntu | chpasswd
+sudo echo root:root | chpasswd
