@@ -1,4 +1,3 @@
-import fabfile
 import subprocess
 
 def change_mark(sample):
@@ -16,8 +15,8 @@ def start_command(hosts,auth,command):
     # start_command(['192.168.11.3','192.168.11.31'],['stack','stack'],'uname -a') <= TEST Line
 
     """
-
-    output = subprocess.Popen(['fab','start_ssh:' +command+","+change_mark(hosts)+
+    # YOU NEED STACK USER
+    output = subprocess.Popen(['fab','-f','~/Inspection-System/ssh_manager/fabfile.py','start_ssh:' +command+","+change_mark(hosts)+
                                ","+change_mark(auth)],stdout=subprocess.PIPE).stdout
     result = output.read().strip()
     output.close()

@@ -1,9 +1,3 @@
-"""
-==================================================
-          Check Component Case Manager
-==================================================
-"""
-
 class CaseManager :
 
     def __init__(self):
@@ -13,6 +7,7 @@ class CaseManager :
         # call case class
         return getattr(case,'execute')(data)
 
+
 def call_case(case,data):
 
     casemodule = __import__("cases." + case.lower() +".controller",
@@ -21,5 +16,5 @@ def call_case(case,data):
     CaseManager.invoke(casemodule.Client(),data)
 
 #driver_manager
-
-call_case('P2P','DATADATA')
+data = [['192.168.11.3', '192.168.11.31'],['stack', 'stack'],'ping -c 3 -q 192.168.11.3']
+call_case('P2P',data)
