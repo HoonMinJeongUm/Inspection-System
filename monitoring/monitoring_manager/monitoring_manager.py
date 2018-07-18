@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 # Use Zabbix Plugin
 # Reference from Openstack Project [ Zabbix Plugin for Application Monitoring in Tacker VNF Manager ]
 
@@ -14,7 +13,3 @@ class MonitoringManager(VNFMonitorZabbix):
 
     def start(self, case_manager_msg):
         self.data = case_manager_msg
-=======
-
-
->>>>>>> Stashed changes
