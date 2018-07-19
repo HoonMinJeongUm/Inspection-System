@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# plugin_locustio.py
+# plugin_artillery.py
 
 from ssh_manager import listener
 import subprocess
@@ -13,8 +13,8 @@ def bash_command(cmd):
 
 
 def start(hosts=None, auth=None, vnf_testing_args_dict=None):
-    cmd = 'locust -f locustfile.py'
-    # locustfile.py transfer needed
-    # vnf_testing_args_dict has the path of locustfile.py
+    cmd = 'artillery quick --count 10 -n 20 http://192.168.8.101/'
+    # cmd = 'artillery run artillery_config.yml'
+    # artillery_config.yml transfer needed
+    # vnf_testing_args_dict has the path of artillery_config.yml
     listener.start_command(hosts=hosts, auth=auth, command=cmd)
-    # Todo : How to open new tab for locustio gui page?

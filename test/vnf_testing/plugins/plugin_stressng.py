@@ -19,6 +19,7 @@ def start(hosts=None, auth=None, vnf_testing_args_dict={}):
                           "vm-bytes": 0,
                           "hdd": 0,
                           "hdd-bytes": 0,
+                          "timeout": 0,
                           }
 
     if "cpu" in vnf_testing_args_dict:
@@ -36,11 +37,14 @@ def start(hosts=None, auth=None, vnf_testing_args_dict={}):
     if "hdd_bytes" in vnf_testing_args_dict:
         stressng_args_dict["hdd-bytes"] = str(vnf_testing_args_dict['hdd_bytes'])
 
+    if "timeout" in vnf_testing_args_dict:
+        stressng_args_dict["tiemout"] = str(vnf_testing_args_dict['timeout'])
+
     for k, v in stressng_args_dict.items():
         if v != 0:
             cmd = cmd + '--' + k + ' ' + v + ' '
 
     LOG.debug("plugin_stressng : cmd = " + cmd)
 
-    # cmd = 'stress -c 4 --vm 3 --vm-bytes 2048m --hdd 2 --hdd-bytes 1024m'
+    # cmd = 'stress --cpu 4 --vm 3 --vm-bytes 2048m --hdd 2 --hdd-bytes 1024m --timeout 10s'
     listener.start_command(hosts=hosts, auth=auth, command=cmd)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vnf_test_manager.py
 
-from test.vnf_testing.plugins import plugin_locustio, plugin_stressng
+from test.vnf_testing.plugins import plugin_locustio, plugin_stressng, plugin_artillery
 import logging
 LOG = logging.getLogger(__name__)
 
@@ -15,3 +15,5 @@ def start(tool, hosts=None, auth=None, vnf_testing_args_dict=None):
         plugin_locustio.start(hosts, auth, vnf_testing_args_dict)
     elif str(tool) == 'stress-ng':
         plugin_stressng.start(hosts, auth, vnf_testing_args_dict)
+    elif str(tool) == 'artillery':
+        plugin_artillery.start(hosts, auth, vnf_testing_args_dict)
