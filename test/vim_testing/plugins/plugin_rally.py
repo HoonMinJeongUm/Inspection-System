@@ -7,6 +7,14 @@ LOG = logging.getLogger(__name__)
 
 
 def start(requestdict):
+    """Starts Rally testing.
+
+    Args:
+        requestdict: A dictionary that is used to execute the Rally testing.
+
+    Returns:
+        None.
+    """
     try:
         from rally import api as rally_api
     except ImportError:

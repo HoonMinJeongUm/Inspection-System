@@ -13,6 +13,16 @@ def bash_command(cmd):
 
 
 def start(hosts=None, auth=None, vnf_testing_args_dict=None):
+    """Starts artillery tool.
+
+    Args:
+        hosts: A host's ip that user wants to test in.
+        auth: A host's password or publickey that user wants to test in.
+        vnf_testing_args_dict: A dictionary of arguments used to execute the vnf testing plugins.
+
+    Returns:
+        None.
+    """
     cmd = 'artillery quick --count 10 -n 20 http://192.168.8.101/'
     # cmd = 'artillery run artillery_config.yml'
     # artillery_config.yml transfer needed

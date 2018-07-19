@@ -13,6 +13,16 @@ def bash_command(cmd):
 
 
 def start(hosts=None, auth=None, vnf_testing_args_dict={}):
+    """Starts stress-ng tool.
+
+    Args:
+        hosts: A host's ip that user wants to test in.
+        auth: A host's password or public-key that user wants to test in.
+        vnf_testing_args_dict: A dictionary of arguments used to execute the vnf testing plugins.
+
+    Returns:
+        None.
+    """
     cmd = 'stress '
     stressng_args_dict = {"cpu": 0,
                           "vm": 0,
@@ -38,7 +48,7 @@ def start(hosts=None, auth=None, vnf_testing_args_dict={}):
         stressng_args_dict["hdd-bytes"] = str(vnf_testing_args_dict['hdd_bytes'])
 
     if "timeout" in vnf_testing_args_dict:
-        stressng_args_dict["tiemout"] = str(vnf_testing_args_dict['timeout'])
+        stressng_args_dict["timeout"] = str(vnf_testing_args_dict['timeout'])
 
     for k, v in stressng_args_dict.items():
         if v != 0:
