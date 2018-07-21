@@ -2,8 +2,10 @@
 # plugin_artillery.py
 
 from ssh_manager import listener
+
 import subprocess
 import logging
+
 LOG = logging.getLogger(__name__)
 
 

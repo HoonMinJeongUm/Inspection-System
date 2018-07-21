@@ -3,7 +3,9 @@
 
 from test.vim_testing import vim_test_manager
 from test.vnf_testing import vnf_test_manager
+
 import logging
+
 LOG = logging.getLogger(__name__)
 
 

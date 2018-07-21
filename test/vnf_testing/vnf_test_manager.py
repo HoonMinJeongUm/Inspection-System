@@ -4,7 +4,9 @@
 from test.vnf_testing.plugins import plugin_locustio
 from test.vnf_testing.plugins import plugin_stressng
 from test.vnf_testing.plugins import plugin_artillery
+
 import logging
+
 LOG = logging.getLogger(__name__)
 
 

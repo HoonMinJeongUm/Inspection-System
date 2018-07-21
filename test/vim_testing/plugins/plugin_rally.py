@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 # plugin_rally.py
+
 import json
 import logging
 import os
+
 LOG = logging.getLogger(__name__)
 
 
