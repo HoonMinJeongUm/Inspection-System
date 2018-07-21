@@ -33,6 +33,7 @@ class CaseManager(object):
         Returns:
             None.
         """
+        LOG.debug("Test-case_manager.py start()")
         if case not in CASES:
             # TODO(Jaewook) : Error Log.
             LOG.warning("The case is not in CASES set.")

@@ -11,6 +11,14 @@ LOG = logging.getLogger(__name__)
 
 # Bash Command Function for using bash shell
 def bash_command(cmd):
+    """Execute CLI command on /bin/bash shell.
+
+    Args:
+        cmd: A string that contains command to execute.
+
+    Returns:
+        None.
+    """
     subprocess.Popen(['/bin/bash', '-c', cmd])
 
 
@@ -25,6 +33,7 @@ def start(hosts=None, auth=None, vnf_testing_args_dict={}):
     Returns:
         None.
     """
+    LOG.debug("plugin_stressng.py start()")
     cmd = 'stress '
     stressng_args_dict = {"cpu": 0,
                           "vm": 0,

@@ -17,6 +17,7 @@ def start(requestdict):
     Returns:
         None.
     """
+    LOG.debug("plugin_rally.py start()")
     try:
         from rally import api as rally_api
     except ImportError:

@@ -33,6 +33,7 @@ def start(hosts=None, auth=None, vnf_testing_args_dict=None):
     Returns:
         None.
     """
+    LOG.debug("plugin_locustio.py start()")
     cmd = 'locust -f locustfile.py'
     # locustfile.py transfer needed
     # vnf_testing_args_dict has the path of locustfile.py
