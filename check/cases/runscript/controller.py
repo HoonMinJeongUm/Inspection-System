@@ -1,6 +1,12 @@
 from check.cases.base_controller import BaseController
+from ssh_manager import listener
+from check.cases.runscript import parser
 
 class Client(BaseController):
+
+    def __init__(self):
+        self.pars = parser.P2PParser()
+
     def separate_data(self,info):
         print(data)
 
