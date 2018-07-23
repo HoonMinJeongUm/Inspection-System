@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# plugin_locustio.py
+# plugin_artillery.py
 
 from ssh_manager import listener
 
@@ -23,7 +23,7 @@ def bash_command(cmd):
 
 
 def start(hosts=None, auth=None, vnf_testing_args_dict=None):
-    """Starts locustio tool.
+    """Starts artillery tool.
 
     Args:
         hosts: A host's ip that user wants to test in.
@@ -33,9 +33,9 @@ def start(hosts=None, auth=None, vnf_testing_args_dict=None):
     Returns:
         None.
     """
-    LOG.debug("plugin_locustio.py start()")
-    cmd = 'locust -f locustfile.py'
-    # locustfile.py transfer needed
-    # vnf_testing_args_dict has the path of locustfile.py
+    LOG.debug("plugin_artillery.py start()")
+    cmd = 'artillery quick --count 10 -n 20 http://192.168.8.101/'
+    # cmd = 'artillery run artillery_config.yml'
+    # artillery_config.yml transfer needed
+    # vnf_testing_args_dict has the path of artillery_config.yml
     listener.start_command(hosts=hosts, auth=auth, command=cmd)
-    # TODO(Jaewook) : How to open new tab for locustio gui page?
