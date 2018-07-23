@@ -22,17 +22,5 @@ class MonitoringManager(VNFMonitorZabbix):
     def start(self, case_manager_msg):
         self.data = case_manager_msg
 
-    def set_vdu_info(self):
-        temp_vduname = self.kwargs['vdus'].keys()
-        for node in temp_vduname:
-            if 'application' in \
-                    self.kwargs['vdus'][node]['parameters'].keys():
-                self.vduname.append(node)
-                self.hostinfo[node] = copy.deepcopy(zapi.dVDU_INFO)
-                self.set_zbx_info(node)
-                self.hostinfo[node]['mgmt_ip'] = \
-                    self.kwargs['vdus'][node]['mgmt_ip']
-                self.hostinfo[node]['parameters'] = \
-                    self.kwargs['vdus'][node]['parameters']
-                self.hostinfo[node]['vdu_id'] = self.vnf['id']
+
 
