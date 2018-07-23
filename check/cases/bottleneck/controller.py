@@ -12,12 +12,12 @@ class Client(BaseController):
         # netstat - nap | grep:80 | grep ESTAB | wc - l(웹 동시접속자 수)
 
         # separate_data(data)
-        # Two case L 1. netstat - nap | grep ESTAB | wc - l
-        #            2. netstat - nap | <custom port> | grep ESTAB | wc - l
+        # Two case L 1. netstat - nap | grep ESTAB | wc -l
+        #            2. netstat - nap | <custom port> | grep ESTAB | wc -l
 
         print("Start Execute")
         hosts = data[0]
         auth = data[1]
         command = data[2]
         print(listener.start_command(hosts, auth, command))
-        # start_command(['192.168.11.3','192.168.11.31'],['stack','stack'],'uname -a') <= TEST Line
+        # start_command(['192.168.11.3','192.168.11.31'],['stack','stack'],'uname -a')P <= TEST Line

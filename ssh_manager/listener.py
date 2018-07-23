@@ -20,9 +20,6 @@ def start_command(hosts,auth,command):
                                ","+change_mark(auth)],stdout=subprocess.PIPE).stdout
     result = output.read().strip()
     output.close()
-    print("===================================================================")
-    print(result.decode(encoding="utf-8"))
-    print("===================================================================")
     return result.decode(encoding="utf-8")
 
 

@@ -23,10 +23,10 @@ def env_setting(hosts,auth):
         env.password = tmpauth[1]
 
     env.hosts = get_hostlist(hosts)
-
+@parallel
 def run_ssh(command):
     run(command)
-
+@parallel
 def run_script(local_path, remote_path,file_name):
     execute(run_ssh, 'mkdir -p ' + remote_path)
     put(local_path+'/'+file_name,remote_path+'/'+file_name)
