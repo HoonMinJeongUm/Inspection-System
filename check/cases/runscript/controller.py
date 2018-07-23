@@ -13,4 +13,7 @@ class Client(BaseController):
         local_script = data[2]
         remote_script = data[3]
         file_name = "test_script"
-        print(listener.start_script(hosts, auth, file_name,local_script,remote_script))
+        result = listener.start_script(hosts, auth, file_name,local_script,remote_script)
+        print("===================================================================")
+        print(result)
+        print("===================================================================")

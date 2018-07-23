@@ -19,5 +19,9 @@ class Client(BaseController):
         hosts = data[0]
         auth = data[1]
         command = data[2]
-        print(listener.start_command(hosts, auth, command))
+        result = listener.start_command(hosts, auth, command)
+        print("===================================================================")
+        print(result)
+        print("===================================================================")
+
         # start_command(['192.168.11.3','192.168.11.31'],['stack','stack'],'uname -a')P <= TEST Line
