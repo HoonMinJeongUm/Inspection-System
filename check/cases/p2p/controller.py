@@ -1,8 +1,12 @@
 from check.cases.base_controller import BaseController
 from ssh_manager import listener
+from check.cases.p2p import parser
 
 class Client(BaseController):
 # ping -c 3 -q LOCAL IP(
+
+    def __init__(self):
+        self.pars = parser.P2PParser()
 
     def separate_data(self,info):
         print(info)
@@ -15,8 +19,10 @@ class Client(BaseController):
         auth = data[1]
         command = data[2]
         result = listener.start_command(hosts,auth,command)
+        parsing_data = self.pars.parsing(result)
+
         print("===================================================================")
-        print(result)
+        print(parsing_data)
         print("===================================================================")
 
     # start_command(['192.168.11.3','192.168.11.31'],['stack','stack'],'uname -a') <= TEST Line
