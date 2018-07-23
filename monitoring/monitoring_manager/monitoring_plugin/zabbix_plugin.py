@@ -19,14 +19,13 @@ import time
 
 import copy
 from oslo_log import log as logging
-from tacker.vnfm.monitor_drivers import abstract_driver
-from tacker.vnfm.monitor_drivers.zabbix import zabbix_api as zapi
+import zabbix_api as zapi
 
 
 LOG = logging.getLogger(__name__)
 
 
-class VNFMonitorZabbix(abstract_driver.VNFMonitorAbstractDriver):
+class VNFMonitorZabbix(object):
     params = ['application', 'OS']
 
     def __init__(self):

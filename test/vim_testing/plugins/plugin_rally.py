@@ -1,12 +1,23 @@
 # -*- coding: utf-8 -*-
 # plugin_rally.py
+
 import json
 import logging
 import os
+
 LOG = logging.getLogger(__name__)
 
 
 def start(requestdict):
+    """Starts Rally testing.
+
+    Args:
+        requestdict: A dictionary that is used to execute the Rally testing.
+
+    Returns:
+        None.
+    """
+    LOG.debug("plugin_rally.py start()")
     try:
         from rally import api as rally_api
     except ImportError:
