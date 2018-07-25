@@ -11,6 +11,13 @@ class MonitoringCaseManager(object):
     Case management of monitoring
     """
     def __init__(self, request):
+        """
+        Initialize CaseManager
+        1. type(vitrageconf) : starts vitrageconf module
+        2. type(management) : starts management module
+        :param request: 'request' must be an dictionary data type that includes header
+        :returns: None
+        """
         try:
             if request['header'] is not 'Monitoring':
                 raise KeyError
