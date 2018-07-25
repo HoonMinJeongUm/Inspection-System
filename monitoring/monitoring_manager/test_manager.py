@@ -30,5 +30,4 @@ test_kwargs = {'vdus': {'Zabbix_client':
 
 test = MonitoringManager()
 pdb.set_trace()
-test.add_to_appmonitor(test_vnf, test_kwargs)
-
+test.start(test_vnf)
