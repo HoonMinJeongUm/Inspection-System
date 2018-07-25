@@ -5,7 +5,7 @@ from check.cases.runscript import parser
 class Client(BaseController):
 
     def __init__(self):
-        self.pars = parser.P2PParser()
+        self.pars = parser.RunscriptParser()
 
     def separate_data(self,info):
         print(data)
@@ -13,7 +13,6 @@ class Client(BaseController):
     def execute(self, data):
         # separate_data(data)
         print("Start Execute")
-        """We need to sperate parameter at data"""
         hosts = data[0]
         auth = data[1]
         local_script = data[2]

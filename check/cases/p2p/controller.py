@@ -19,11 +19,10 @@ class Client(BaseController):
         auth = data[1]
         command = data[2]
         result = listener.start_command(hosts,auth,command)
-        parsing_data = self.pars.parsing(result)
+        parsing_data = self.pars.parsing(hosts,command,result)
 
         print("===================================================================")
         print(parsing_data)
         print("===================================================================")
-
-    # start_command(['192.168.11.3','192.168.11.31'],['stack','stack'],'uname -a') <= TEST Line
+        return parsing_data
 

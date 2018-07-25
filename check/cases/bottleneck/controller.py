@@ -5,7 +5,7 @@ from check.cases.bottleneck import parser
 class Client(BaseController):
 
     def __init__(self):
-        self.pars = parser.P2PParser()
+        self.pars = parser.BottleneckParser()
 
 
     def separate_data(self,info):
@@ -26,8 +26,9 @@ class Client(BaseController):
         auth = data[1]
         command = data[2]
         result = listener.start_command(hosts, auth, command)
-        print("===================================================================")
-        print(result)
-        print("===================================================================")
+        parsing_data = self.pars.parsing(hosts,command,result)
 
-        # start_command(['192.168.11.3','192.168.11.31'],['stack','stack'],'uname -a')P <= TEST Line
+        print("===================================================================")
+        print(parsing_data)
+        print("================================s===================================")
+        return parsing_data

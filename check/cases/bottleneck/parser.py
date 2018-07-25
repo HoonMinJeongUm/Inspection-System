@@ -2,11 +2,17 @@ from check.cases.base_parser import BaseParser
 
 class BottleneckParser(BaseParser):
     def __init__(self):
-        self.parsing_data = ''
+        pass
 
-    def parsing(self,result):
+    def parsing(self,hosts,command,result):
         """
         We need to add some code for chaged result
         """
         parsing_data = result
-        return parsing_data
+        parsing_result = ''
+
+        for host in hosts:
+            start_slicing = parsing_data.find('['+host+'] run: ' + command)
+            end_slicing = parsing_data.find('['+host+'] out: \n\n')
+            parsing_result += (parsing_data[start_slicing:end_slicing].rstrip('\n') + ' number\n')
+        return parsing_result
