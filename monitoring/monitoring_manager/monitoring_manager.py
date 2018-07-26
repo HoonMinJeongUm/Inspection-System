@@ -8,6 +8,7 @@ import ConfigParser
 import logging, sys
 import yaml
 import copy
+import ast
 
 
 class MonitoringManager(VNFMonitorZabbix):
@@ -47,69 +48,44 @@ class MonitoringManager(VNFMonitorZabbix):
         #check for information section is correct
         try:
             for text in config.sections():
-                if text != "INFO" and text != "APP" and text != "OS":
+                if text != "INFO" and text!= "APP_INFO" and text != "APP" and text != "OS":
                     raise KeyError
         except KeyError:
             logging.error("Missing Information of Zabbix API")
             sys.exit(1)
-        # parse the information
-        conf['app_monitoring_policy']['zabbix_username'] = config.get('INFO', 'zabbix_username')
-        conf['app_monitoring_policy']['zabbix_password'] = config.get('INFO', 'zabbix_password')
-        conf['app_monitoring_policy']['zabbix_server_ip'] = config.get('INFO', 'zabbix_server_ip')
-        conf['app_monitoring_policy']['zabbix_server_port'] = config.get('INFO', 'zabbix_server_port')
-        conf['app_monitoring_policy']['mgmt_ip'] = config.get('INFO', 'mgmt_ip')
-        conf['app_monitoring_policy']['parameters']['application']['app_name'] \
-            = config.get('APP', 'app_name')
-        conf['app_monitoring_policy']['parameters']['application']['app_port'] \
-            = config.get('APP', 'app_port')
-        conf['app_monitoring_policy']['parameters']['application']['ssh_username'] \
-            = config.get('APP', 'ssh_username')
-        conf['app_monitoring_policy']['parameters']['application']['ssh_password'] \
-            = config.get('APP', 'ssh_password')
+
+        # parse the basic_information
+        for INFO in config.options('INFO'):
+            conf['app_monitoring_policy'][INFO] = config.get('INFO', INFO)
+        # parse the app_information
+        for APP_INFO in config.options('APP_INFO'):
+            conf['app_monitoring_policy']['parameters']['application'][APP_INFO] \
+                = config.get('APP_INFO', APP_INFO)
         # parse the application information
-        app_status = config.get('APP', 'app_status')
-        if app_status == "true":
-            conf['app_monitoring_policy']['parameters']['application']['app_status']['actionname'] = 'cmd'
-            conf['app_monitoring_policy']['parameters']['application']['app_status']['cmd-action'] \
-                = 'sudo service apache2 restart'
-            conf['app_monitoring_policy']['parameters']['application']['app_status']['condition'] \
-                = ['down']
-        else:
-            del conf['app_monitoring_policy']['parameters']['application']['app_status']
-
-        app_memory = config.get('APP', 'app_memory')
-        if app_memory == "true":
-            pass
-        else:
-            del conf['app_monitoring_policy']['parameters']['application']['app_memory']
+        for topic in config.options('APP'):
+            parse_app = config.get('APP', topic)
+            parse_app = ast.literal_eval(parse_app)
+            if parse_app['status'] == "true":
+                conf['app_monitoring_policy']['parameters']['application'][topic]['actionname'] \
+                    = 'cmd'
+                conf['app_monitoring_policy']['parameters']['application'][topic]['cmd-action'] \
+                    = parse_app['cmd-action']
+                conf['app_monitoring_policy']['parameters']['application'][topic]['condition'] \
+                    = parse_app['condition']
+            else:
+                del conf['app_monitoring_policy']['parameters']['application'][topic]
         #parse the os information
-        os_cpu_usage = config.get('OS', 'os_cpu_usage')
-        if os_cpu_usage == "true":
-            conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['actionname'] = 'cmd'
-            conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['cmd-action'] \
-                = 'sudo reboot'
-            conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['condition'] \
-                = ['less', 30]
-        else:
-            del conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']
-
-        os_proc_value = config.get('OS', 'os_proc_value')
-        if os_proc_value == "true":
-            pass
-        else:
-            del conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']
-
-        os_cpu_load = config.get('OS', 'os_cpu_load')
-        if os_cpu_load == "true":
-            pass
-        else:
-            del conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']
-
-        os_agent_info = config.get('OS', 'os_agent_info')
-        if os_agent_info == "true":
-            pass
-        else:
-            del conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']
+        for topic in config.options('OS'):
+            parse_os = config.get('OS', topic)
+            parse_os = ast.literal_eval(parse_os)
+            if parse_os['status'] == "true":
+                conf['app_monitoring_policy']['parameters']['OS'][topic]['actionname'] = 'cmd'
+                conf['app_monitoring_policy']['parameters']['OS'][topic]['cmd-action'] \
+                    = parse_os['cmd-action']
+                conf['app_monitoring_policy']['parameters']['OS'][topic]['condition'] \
+                    = parse_os['condition']
+            else:
+                del conf['app_monitoring_policy']['parameters']['OS'][topic]
 
         return conf
 
