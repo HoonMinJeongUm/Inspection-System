@@ -1,7 +1,13 @@
 from check.cases.base_controller import BaseController
 from ssh_manager import listener
+from check.cases.bottleneck import parser
 
 class Client(BaseController):
+
+    def __init__(self):
+        self.pars = parser.BottleneckParser()
+
+
     def separate_data(self,info):
         print(data)
 
@@ -12,12 +18,17 @@ class Client(BaseController):
         # netstat - nap | grep:80 | grep ESTAB | wc - l(웹 동시접속자 수)
 
         # separate_data(data)
-        # Two case L 1. netstat - nap | grep ESTAB | wc - l
-        #            2. netstat - nap | <custom port> | grep ESTAB | wc - l
+        # Two case L 1. netstat - nap | grep ESTAB | wc -l
+        #            2. netstat - nap | <custom port> | grep ESTAB | wc -l
 
         print("Start Execute")
         hosts = data[0]
         auth = data[1]
         command = data[2]
-        print(listener.start_command(hosts, auth, command))
-        # start_command(['192.168.11.3','192.168.11.31'],['stack','stack'],'uname -a') <= TEST Line
+        result = listener.start_command(hosts, auth, command)
+        parsing_data = self.pars.parsing(hosts,command,result)
+
+        print("===================================================================")
+        print(parsing_data)
+        print("================================s===================================")
+        return parsing_data
