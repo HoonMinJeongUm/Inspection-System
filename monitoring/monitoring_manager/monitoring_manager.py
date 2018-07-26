@@ -18,11 +18,7 @@ class MonitoringManager(VNFMonitorZabbix):
     def __init__(self):
         super(MonitoringManager, self).__init__()
         self.data = None
-<<<<<<< HEAD
-        self
-=======
         self.name_of_template = "HoonMinJeongUm Template "
->>>>>>> e6c8515a0173b1344b3f245282b33c9ade813503
 
     def start(self, vnf):
         """
@@ -35,6 +31,11 @@ class MonitoringManager(VNFMonitorZabbix):
         self.add_to_appmonitor(vnf)
 
     def read_yaml(self):
+        """
+        making data for zabbix_plugin
+        to use monitoring [yaml] template
+        :return: none
+        """
         with open('monitoring.yaml', 'r') as files:
             conf = yaml.load(files)
         my_conf = self.parse_conf(conf)
@@ -49,10 +50,10 @@ class MonitoringManager(VNFMonitorZabbix):
         """
         config = ConfigParser.ConfigParser()
         config.read('monitoring.cfg')
-        #check for information section is correct
+        # check for information section is correct
         try:
             for text in config.sections():
-                if text != "INFO" and text!= "APP_INFO" and text != "APP" and text != "OS":
+                if text != "INFO" and text != "APP_INFO" and text != "APP" and text != "OS":
                     raise KeyError
         except KeyError:
             logging.error("Missing Information of Zabbix API")
@@ -78,7 +79,7 @@ class MonitoringManager(VNFMonitorZabbix):
                     = parse_app['condition']
             else:
                 del conf['app_monitoring_policy']['parameters']['application'][topic]
-        #parse the os information
+        # parse the os information
         for topic in config.options('OS'):
             parse_os = config.get('OS', topic)
             parse_os = ast.literal_eval(parse_os)
