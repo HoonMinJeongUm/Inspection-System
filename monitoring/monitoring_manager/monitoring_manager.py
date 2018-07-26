@@ -18,11 +18,7 @@ class MonitoringManager(VNFMonitorZabbix):
     def __init__(self):
         super(MonitoringManager, self).__init__()
         self.data = None
-<<<<<<< HEAD
-        self
-=======
         self.name_of_template = "HoonMinJeongUm Template "
->>>>>>> e6c8515a0173b1344b3f245282b33c9ade813503
 
     def start(self, vnf):
         """
