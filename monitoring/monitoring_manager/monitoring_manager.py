@@ -10,6 +10,7 @@ class MonitoringManager(VNFMonitorZabbix):
     """
     def __init__(self):
         self.data = None
+        self
 
     def start(self, case_manager_msg):
         self.data = case_manager_msg

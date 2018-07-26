@@ -1,12 +1,18 @@
 import subprocess
 
+"""
+
+"""
+vitrage_conf = "/opt/stack/Inspection-System/test.conf"  # replace here with /etc/vitrage/vitrage.conf
+password = "zabbix"
+path = "/opt/stack/Inspection-System"                    # replace here with /etc/vitrage/
+zabbix_conf = "/opt/stack/Inspection-System/zabbix_conf.yaml"
+ip = "f.f.f.f"                                          # server ip
+Zabbix_host = "Zabbix server"
+type = "nova.host"
+
 
 def config_vitrage():
-    vitrage_conf = "/opt/stack/Inspection-System/test.conf"  # replace here with /etc/vitrage/vitrage.conf
-    password = "zabbix"
-    path = "/opt/stack/Inspection-System"                    # replace here with /etc/vitrage/
-    zabbix_conf = "/opt/stack/Inspection-System/zabbix_conf.yaml"
-    ip = "f.f.f.f"
 
 
     # add zabbix to list of datasources in /etc/vitrage/vitrage.conf
@@ -22,7 +28,7 @@ def config_vitrage():
     #make zabbix_conf.yaml file and add texts
     open("%s/zabbix_conf.yaml" %path,'w').close()
     subprocess.call("echo 'zabbix:' >> '%s'" %zabbix_conf, shell=True)
-    subprocess.call("echo '- zabbix_host: Zabbix server' >> '%s'" %zabbix_conf, shell=True)
-    subprocess.call("echo '  type: nova.host' >> '%s'" %zabbix_conf, shell=True)
+    subprocess.call("echo '- zabbix_host: '%s'' >> '%s'" %(Zabbix_host, zabbix_conf), shell=True)
+    subprocess.call("echo '  type: '%s'' >> '%s'" %(zabbix_conf, type), shell=True)
     subprocess.call("echo '  name: Zabbix server' >> '%s'" %zabbix_conf, shell=True)
 
