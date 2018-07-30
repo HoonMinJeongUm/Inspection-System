@@ -31,11 +31,13 @@ def start(hosts=None, auth=None, vnf_testing_args_dict=None):
         vnf_testing_args_dict: A dictionary of arguments used to execute the vnf testing plugins.
 
     Returns:
-        None.
+        artillery_result: A string that is result of the test.
     """
     LOG.debug("plugin_artillery.py start()")
     cmd = 'artillery quick --count 10 -n 20 http://192.168.8.101/'
     # cmd = 'artillery run artillery_config.yml'
     # artillery_config.yml transfer needed
     # vnf_testing_args_dict has the path of artillery_config.yml
-    listener.start_command(hosts=hosts, auth=auth, command=cmd)
+    artillery_result = listener.start_command(hosts=[hosts], auth=auth, command=cmd)
+
+    return artillery_result
