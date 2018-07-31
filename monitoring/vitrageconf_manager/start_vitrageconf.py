@@ -2,6 +2,8 @@
 import subprocess
 #import ssh_manager.listener
 
+
+
 class Vitrageconf_manager(object):
 
     def __init__(self):
@@ -57,9 +59,9 @@ class Vitrageconf_manager(object):
         subprocess.call("echo 'sudo apt-get -y install apache2' >> '%s'" % self.script, shell=True)
         subprocess.call("echo '\n' >> '%s'" % self.script, shell=True)
 
-        subprocess.call("echo 'sudo sed -i \"2s/.*/`ifconfig '%s' | grep \"\"\\\"inet addr:\\\"\"\"| cut -d: -f2 | awk \"\"\\\"{ print $1 }\\\"\"\"`/g\" /etc/hosts' >> '%s'" % (self.vm_interface, self.script), shell=True)
-        subprocess.call("echo 'sudo sed -i \"s/Bcast/`cat /etc/hostname`/g\" \"/etc/hosts\"' >> '%s'" % self.script,shell=True)
-        subprocess.call("echo 'sudo sed -i \"3s/.*/'%s'\tmonitor/g\" \"/etc/hosts\"' >> '%s'" % (self.vm_ip, self.script),shell=True)
+        subprocess.call("echo 'sudo sed -i \"2s/.*/`ifconfig '%s' | grep \"inet addr:\"| cut -d: -f2 | awk \"{ print $1 }\"`/g\" \"/opt/stack/Inspection-System/testhosts\"' >> '%s'" % (self.vm_interface, self.script), shell=True)           #replace testhosts to /etc/hosts
+        subprocess.call("echo 'sudo sed -i \"s/Bcast/`cat /etc/hostname`/g\" \"/opt/stack/Inspection-System/testhosts\"' >> '%s'" % self.script,shell=True)                                 #replace testhosts to /etc/hosts
+        subprocess.call("echo 'sudo sed -i \"3s/.*/'%s'\\\tmonitor/g\" \"/opt/stack/Inspection-System/testhosts\"' >> '%s'" % (self.vm_ip, self.script), shell=True)                        #replace testhosts to /etc/hosts
         subprocess.call("echo 'sudo /etc/init.d/networking restart' >> '%s'" % self.script, shell=True)
         subprocess.call("echo 'sudo echo \"zabbix ALL=NOPASSWD: ALL\" >> /etc/sudoers' >> '%s'" % self.script, shell=True)
         subprocess.call("echo '\n' >> '%s'" % self.script, shell=True)
@@ -78,10 +80,16 @@ class Vitrageconf_manager(object):
         # os.chmod("%s/install_agent" %path,0777)     #make <install_agent> shell script execute
         #ssh_manager.listener.start_script(self.vm_ip,self. )  # hosts,auth,file_name,local_path,remote_path
 
-a= Vitrageconf_manager()
+
+    def start(self):
+        self.decode()
+        self.test_if()
+
+        if self.monitoring_tool == "Zabbix":
+            self.make_script()
+            self.config_vitrage()
 
 
-if  a.monitoring_tool == "Zabbix" :
 
-    a.config_vitrage()
-    a.make_script()
+a=Vitrageconf_manager()
+a.make_script()
