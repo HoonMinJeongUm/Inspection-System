@@ -34,7 +34,32 @@ def start(hosts=None, auth=None, vnf_testing_args_dict=None):
         artillery_result: A string that is result of the test.
     """
     LOG.debug("plugin_artillery.py start()")
-    cmd = 'artillery quick --count 10 -n 20 http://192.168.8.101/'
+
+    cmd = 'artillery quick '
+    artillery_args_dict = {"count": 0,
+                           "num": 0,
+                           "target_ip": 0,
+                           }
+
+    if "count" in vnf_testing_args_dict:
+        artillery_args_dict["count"] = str(vnf_testing_args_dict['count'])
+
+    if "num" in vnf_testing_args_dict:
+        artillery_args_dict["num"] = str(vnf_testing_args_dict['num'])
+
+    if "target_ip" in vnf_testing_args_dict:
+        artillery_args_dict["target_ip"] = str(vnf_testing_args_dict['target_ip'])
+    else:
+        artillery_args_dict["target_ip"] = "http://127.0.0.1/"
+
+    for k, v in artillery_args_dict.items():
+        if v != 0:
+            cmd = cmd + '--' + k + ' ' + str(v) + ' '
+
+    print("plugin_artillery : cmd = " + cmd)
+    LOG.debug("plugin_artillery: cmd = " + cmd)
+
+    # cmd = 'artillery quick --count 10 -n 20 http://192.168.8.101/'
     # cmd = 'artillery run artillery_config.yml'
     # artillery_config.yml transfer needed
     # vnf_testing_args_dict has the path of artillery_config.yml

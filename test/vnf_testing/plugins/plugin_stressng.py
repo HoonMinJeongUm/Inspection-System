@@ -65,7 +65,7 @@ def start(hosts=None, auth=None, vnf_testing_args_dict={}):
 
     for k, v in stressng_args_dict.items():
         if v != 0:
-            cmd = cmd + '--' + k + ' ' + v + ' '
+            cmd = cmd + '--' + k + ' ' + str(v) + ' '
 
     cmd = cmd + '--metrics-brief'
     print("plugin_stressng : cmd = " + cmd)
