@@ -6,6 +6,8 @@ from ssh_manager import listener
 import subprocess
 import logging
 
+
+logging.info('Starting logger for...')
 LOG = logging.getLogger(__name__)
 
 
@@ -27,14 +29,14 @@ def start(hosts=None, auth=None, vnf_testing_args_dict={}):
 
     Args:
         hosts: A host's ip that user wants to test in.
-        auth: A host's password or public-key that user wants to test in.
+        auth: A dictionary that contains host's hostname and password or public-key that user wants to test in.
         vnf_testing_args_dict: A dictionary of arguments used to execute the vnf testing plugins.
 
     Returns:
-        None.
+        stressng_result: A string that is result of the test.
     """
     LOG.debug("plugin_stressng.py start()")
-    cmd = 'stress '
+    cmd = 'stress-ng '
     stressng_args_dict = {"cpu": 0,
                           "vm": 0,
                           "vm-bytes": 0,
@@ -63,9 +65,13 @@ def start(hosts=None, auth=None, vnf_testing_args_dict={}):
 
     for k, v in stressng_args_dict.items():
         if v != 0:
-            cmd = cmd + '--' + k + ' ' + v + ' '
+            cmd = cmd + '--' + k + ' ' + str(v) + ' '
 
+    cmd = cmd + '--metrics-brief'
+    print("plugin_stressng : cmd = " + cmd)
     LOG.debug("plugin_stressng : cmd = " + cmd)
 
     # cmd = 'stress --cpu 4 --vm 3 --vm-bytes 2048m --hdd 2 --hdd-bytes 1024m --timeout 10s'
-    listener.start_command(hosts=hosts, auth=auth, command=cmd)
+    stressng_result = listener.start_command(hosts=[hosts], auth=auth, command=cmd)
+
+    return stressng_result

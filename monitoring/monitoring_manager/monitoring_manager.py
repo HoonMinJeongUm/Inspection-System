@@ -8,6 +8,10 @@ import ConfigParser
 import logging, sys
 import yaml
 import copy
+import ast
+
+
+ManagerLogger = logging.getLogger(__name__)
 
 
 class MonitoringManager(VNFMonitorZabbix):
@@ -16,7 +20,7 @@ class MonitoringManager(VNFMonitorZabbix):
     """
     def __init__(self):
         super(MonitoringManager, self).__init__()
-        self.data = None
+        self.my_conf = None
         self.name_of_template = "HoonMinJeongUm Template "
 
     def start(self, vnf):
@@ -26,15 +30,21 @@ class MonitoringManager(VNFMonitorZabbix):
         :return: none
         """
         self.__init__()
-        self.read_yaml()
+        self.read_data()
         self.add_to_appmonitor(vnf)
 
-    def read_yaml(self):
+    def read_data(self):
+        """
+        making data for zabbix_plugin
+        to use monitoring [yaml] template
+        :return: none
+        """
         with open('monitoring.yaml', 'r') as files:
             conf = yaml.load(files)
-        my_conf = self.parse_conf(conf)
+        self.my_conf = self.parse_conf(conf)
+        self.listen_testing()
         self.kwargs = {'vdus': {'Name_of_host': {}}}
-        self.kwargs['vdus']['Name_of_host'] = my_conf['app_monitoring_policy']
+        self.kwargs['vdus']['Name_of_host'] = self.my_conf['app_monitoring_policy']
 
     def parse_conf(self, conf):
         """
@@ -44,80 +54,72 @@ class MonitoringManager(VNFMonitorZabbix):
         """
         config = ConfigParser.ConfigParser()
         config.read('monitoring.cfg')
-        #check for information section is correct
+        # check for information section is correct
         try:
             for text in config.sections():
-                if text != "INFO" and text != "APP" and text != "OS":
+                if text != "INFO" and text != "APP_INFO" and text != "APP" and text != "OS":
                     raise KeyError
         except KeyError:
-            logging.error("Missing Information of Zabbix API")
+            ManagerLogger.error("Missing Information of Zabbix API")
             sys.exit(1)
-        # parse the information
-        conf['app_monitoring_policy']['zabbix_username'] = config.get('INFO', 'zabbix_username')
-        conf['app_monitoring_policy']['zabbix_password'] = config.get('INFO', 'zabbix_password')
-        conf['app_monitoring_policy']['zabbix_server_ip'] = config.get('INFO', 'zabbix_server_ip')
-        conf['app_monitoring_policy']['zabbix_server_port'] = config.get('INFO', 'zabbix_server_port')
-        conf['app_monitoring_policy']['mgmt_ip'] = config.get('INFO', 'mgmt_ip')
-        conf['app_monitoring_policy']['parameters']['application']['app_name'] \
-            = config.get('APP', 'app_name')
-        conf['app_monitoring_policy']['parameters']['application']['app_port'] \
-            = config.get('APP', 'app_port')
-        conf['app_monitoring_policy']['parameters']['application']['ssh_username'] \
-            = config.get('APP', 'ssh_username')
-        conf['app_monitoring_policy']['parameters']['application']['ssh_password'] \
-            = config.get('APP', 'ssh_password')
+
+        # parse the basic_information
+        for INFO in config.options('INFO'):
+            conf['app_monitoring_policy'][INFO] = config.get('INFO', INFO)
+        # parse the app_information
+        for APP_INFO in config.options('APP_INFO'):
+            conf['app_monitoring_policy']['parameters']['application'][APP_INFO] \
+                = config.get('APP_INFO', APP_INFO)
         # parse the application information
-        app_status = config.get('APP', 'app_status')
-        if app_status == "true":
-            conf['app_monitoring_policy']['parameters']['application']['app_status']['actionname'] = 'cmd'
-            conf['app_monitoring_policy']['parameters']['application']['app_status']['cmd-action'] \
-                = 'sudo service apache2 restart'
-            conf['app_monitoring_policy']['parameters']['application']['app_status']['condition'] \
-                = ['down']
-        else:
-            del conf['app_monitoring_policy']['parameters']['application']['app_status']
-
-        app_memory = config.get('APP', 'app_memory')
-        if app_memory == "true":
-            pass
-        else:
-            del conf['app_monitoring_policy']['parameters']['application']['app_memory']
-        #parse the os information
-        os_cpu_usage = config.get('OS', 'os_cpu_usage')
-        if os_cpu_usage == "true":
-            conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['actionname'] = 'cmd'
-            conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['cmd-action'] \
-                = 'sudo reboot'
-            conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['condition'] \
-                = ['less', 30]
-        else:
-            del conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']
-
-        os_proc_value = config.get('OS', 'os_proc_value')
-        if os_proc_value == "true":
-            pass
-        else:
-            del conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']
-
-        os_cpu_load = config.get('OS', 'os_cpu_load')
-        if os_cpu_load == "true":
-            pass
-        else:
-            del conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']
-
-        os_agent_info = config.get('OS', 'os_agent_info')
-        if os_agent_info == "true":
-            pass
-        else:
-            del conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']
+        for topic in config.options('APP'):
+            parse_app = config.get('APP', topic)
+            parse_app = ast.literal_eval(parse_app)
+            if parse_app['status'] == "true":
+                conf['app_monitoring_policy']['parameters']['application'][topic]['actionname'] \
+                    = 'cmd'
+                conf['app_monitoring_policy']['parameters']['application'][topic]['cmd-action'] \
+                    = parse_app['cmd-action']
+                conf['app_monitoring_policy']['parameters']['application'][topic]['condition'] \
+                    = parse_app['condition']
+            else:
+                del conf['app_monitoring_policy']['parameters']['application'][topic]
+        # parse the os information
+        for topic in config.options('OS'):
+            parse_os = config.get('OS', topic)
+            parse_os = ast.literal_eval(parse_os)
+            if parse_os['status'] == "true":
+                conf['app_monitoring_policy']['parameters']['OS'][topic]['actionname'] = 'cmd'
+                conf['app_monitoring_policy']['parameters']['OS'][topic]['cmd-action'] \
+                    = parse_os['cmd-action']
+                conf['app_monitoring_policy']['parameters']['OS'][topic]['condition'] \
+                    = parse_os['condition']
+            else:
+                del conf['app_monitoring_policy']['parameters']['OS'][topic]
 
         return conf
 
     def listen_testing(self):
         """
-        listen the tessting result
+        listen the testing result
+        This module fix the self.my_conf reference from testing result
+        :return: None
         """
-        pass
+        # temporary waiting time
+        wait_for_testing_result = 1
+        time.sleep(wait_for_testing_result)
+
+        if self.my_conf['app_monitoring_policy']['parameters']['application'] is None \
+                and self.my_conf['app_monitoring_policy']['parameters']['OS'] is None:
+            return
+        # test result must have some more information
+        # here is the template of the code
+        test_result = 3.3
+        if 0 <= test_result < 5:
+            pass
+        elif test_result < 10:
+            pass
+        else:
+            ManagerLogger.warning("Testing result is wrong. Not fix condition")
 
     def create_template(self):
         temp_template_api = copy.deepcopy(zapi.dTEMPLATE_CREATE_API)
