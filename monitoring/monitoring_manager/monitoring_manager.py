@@ -11,13 +11,16 @@ import copy
 import ast
 
 
+ManagerLogger = logging.getLogger(__name__)
+
+
 class MonitoringManager(VNFMonitorZabbix):
     """
     Monitoring Manager
     """
     def __init__(self):
         super(MonitoringManager, self).__init__()
-        self.data = None
+        self.my_conf = None
         self.name_of_template = "HoonMinJeongUm Template "
 
     def start(self, vnf):
@@ -27,10 +30,10 @@ class MonitoringManager(VNFMonitorZabbix):
         :return: none
         """
         self.__init__()
-        self.read_yaml()
+        self.read_data()
         self.add_to_appmonitor(vnf)
 
-    def read_yaml(self):
+    def read_data(self):
         """
         making data for zabbix_plugin
         to use monitoring [yaml] template
@@ -38,9 +41,10 @@ class MonitoringManager(VNFMonitorZabbix):
         """
         with open('monitoring.yaml', 'r') as files:
             conf = yaml.load(files)
-        my_conf = self.parse_conf(conf)
+        self.my_conf = self.parse_conf(conf)
+        self.listen_testing()
         self.kwargs = {'vdus': {'Name_of_host': {}}}
-        self.kwargs['vdus']['Name_of_host'] = my_conf['app_monitoring_policy']
+        self.kwargs['vdus']['Name_of_host'] = self.my_conf['app_monitoring_policy']
 
     def parse_conf(self, conf):
         """
@@ -56,7 +60,7 @@ class MonitoringManager(VNFMonitorZabbix):
                 if text != "INFO" and text != "APP_INFO" and text != "APP" and text != "OS":
                     raise KeyError
         except KeyError:
-            logging.error("Missing Information of Zabbix API")
+            ManagerLogger.error("Missing Information of Zabbix API")
             sys.exit(1)
 
         # parse the basic_information
@@ -96,9 +100,26 @@ class MonitoringManager(VNFMonitorZabbix):
 
     def listen_testing(self):
         """
-        listen the tessting result
+        listen the testing result
+        This module fix the self.my_conf reference from testing result
+        :return: None
         """
-        pass
+        # temporary waiting time
+        wait_for_testing_result = 1
+        time.sleep(wait_for_testing_result)
+
+        if self.my_conf['app_monitoring_policy']['parameters']['application'] is None \
+                and self.my_conf['app_monitoring_policy']['parameters']['OS'] is None:
+            return
+        # test result must have some more information
+        # here is the template of the code
+        test_result = 3.3
+        if 0 <= test_result < 5:
+            pass
+        elif test_result < 10:
+            pass
+        else:
+            ManagerLogger.warning("Testing result is wrong. Not fix condition")
 
     def create_template(self):
         temp_template_api = copy.deepcopy(zapi.dTEMPLATE_CREATE_API)
