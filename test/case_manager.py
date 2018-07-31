@@ -39,6 +39,7 @@ class CaseManager(object):
             # TODO(Jaewook) : Error Log.
             LOG.warning("The case is not in CASES set.")
             pass
+
         if str(case) == 'vim':
             LOG.debug("Test-case_manager.py start() - case 'vim'")
             test_result = vim_test_manager.start(tool, requestdict)
@@ -47,9 +48,3 @@ class CaseManager(object):
             test_result = vnf_test_manager.start(tool, hosts, auth, vnf_testing_args_dict)
 
         return test_result
-
-if __name__ == "__main__":
-    logging.info('Starting logger for...')
-    LOG = logging.getLogger(__name__)
-    LOG.warning("Test-case_manager.py start()")
-    CaseManager.start(case='vnf', tool='stressng', hosts='192.168.9.211', auth=['ubuntu', 'ubuntu'], vnf_testing_args_dict={"cpu": 2, "vm": 1, "vm_bytes": '1024m', "hdd": 1, "hdd_bytes": '1024m', "timeout": '10s'})

@@ -28,7 +28,7 @@ def start(tool, hosts=None, auth=None, vnf_testing_args_dict=None):
     LOG.debug("vnf_test_manager.py start()")
     if str(tool) == 'locustio':
         vnf_test_result = plugin_locustio.start(hosts, auth, vnf_testing_args_dict)
-    elif str(tool) == 'stress-ng':
+    elif str(tool) == 'stressng':
         vnf_test_result = plugin_stressng.start(hosts, auth, vnf_testing_args_dict)
     elif str(tool) == 'artillery':
         vnf_test_result = plugin_artillery.start(hosts, auth, vnf_testing_args_dict)

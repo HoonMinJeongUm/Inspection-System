@@ -53,8 +53,10 @@ def start(hosts=None, auth=None, vnf_testing_args_dict=None):
         artillery_args_dict["target_ip"] = "http://127.0.0.1/"
 
     for k, v in artillery_args_dict.items():
-        if v != 0:
+        if v != 0 and k != "target_ip":
             cmd = cmd + '--' + k + ' ' + str(v) + ' '
+
+    cmd = cmd + str(artillery_args_dict["target_ip"])
 
     print("plugin_artillery : cmd = " + cmd)
     LOG.debug("plugin_artillery: cmd = " + cmd)
@@ -63,6 +65,19 @@ def start(hosts=None, auth=None, vnf_testing_args_dict=None):
     # cmd = 'artillery run artillery_config.yml'
     # artillery_config.yml transfer needed
     # vnf_testing_args_dict has the path of artillery_config.yml
-    artillery_result = listener.start_command(hosts=[hosts], auth=auth, command=cmd)
+    artillery_raw_result = listener.start_command(hosts=[hosts], auth=auth, command=cmd)
 
+    artillery_result = artillery_raw_result.replace("\x1b[2K\x1b[1G\x1b[36m⠋\x1b[39m", "")
+    artillery_result = artillery_result.replace("[192.168.9.211]", "")
+    artillery_result = artillery_result.replace("out:", "")
+    artillery_result = artillery_result.replace("\n", "")
+    artillery_result = artillery_result.replace("\x1b[2K", "")
+    artillery_result = artillery_result.replace("\x1b[1G", "")
+    artillery_result = artillery_result.replace("\x1b[36m", "")
+    artillery_result = artillery_result.replace("\x1b[39m", "")
+    artillery_result = artillery_result.replace("\x1b[?25l", "")
+    artillery_result = artillery_result.replace("\x1b[?25h", "")
+    artillery_result = artillery_result.replace("⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏  ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇", "")
+
+    print(artillery_result)
     return artillery_result
