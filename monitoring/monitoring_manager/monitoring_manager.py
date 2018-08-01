@@ -18,20 +18,22 @@ class MonitoringManager(VNFMonitorZabbix):
     """
     Monitoring Manager
     """
-    def __init__(self, vnf):
+    def __init__(self, vnf, name):
         super(MonitoringManager, self).__init__()
         self.my_conf = None
+        self.name = name
+        self.vnf = vnf
         self.name_of_template = "HoonMinJeongUm Template "
-        self.start(vnf)
+        self.start()
 
-    def start(self, vnf):
+    def start(self):
         """
         starts the main logic
         :param vnf: I have to fix it later..
         :return: none
         """
         self.read_data()
-        self.add_to_appmonitor(vnf)
+        self.add_to_appmonitor()
 
     def read_data(self):
         """
@@ -43,8 +45,8 @@ class MonitoringManager(VNFMonitorZabbix):
             conf = yaml.load(files)
         self.my_conf = self.parse_conf(conf)
         self.listen_testing()
-        self.kwargs = {'vdus': {'Name_of_host': {}}}
-        self.kwargs['vdus']['Name_of_host'] = self.my_conf['app_monitoring_policy']
+        self.kwargs = {'vdus': {self.name: {}}}
+        self.kwargs['vdus'][self.name] = self.my_conf['app_monitoring_policy']
 
     @staticmethod
     def parse_conf(conf):
@@ -145,8 +147,7 @@ class MonitoringManager(VNFMonitorZabbix):
             self.hostinfo[vdu]['template_name'] =\
                 temp_template_api['params']['host']
 
-    def add_to_appmonitor(self, vnf):
-        self.vnf = vnf
+    def add_to_appmonitor(self):
         self.set_vdu_info()
         self.tenant_id = self.vnf['vnfd']['tenant_id']
         self.add_host_to_zabbix()
