@@ -3,7 +3,7 @@
 from monitoring_manager.monitoring_manager import MonitoringManager
 import logging
 
-MonitorLog = logging.getLogger("MonitorLog")
+MonitorLog = logging.getLogger(__name__)
 
 
 class MonitoringCaseManager(object):
@@ -36,4 +36,12 @@ class MonitoringCaseManager(object):
         pass
 
     def start_management(self):
-        pass
+        # temporary vnf data model
+        vnf = {'vnfd': {'tenant_id': u'd1e6919c73074d18ab6cd49a02e08391'},
+                    'id': 'b9af3cb5-6e43-4b2c-a056-67bda3f71e1a'}
+        MonitoringManager(vnf)
+
+
+if __name__ == '__main__':
+    requests = {'header': 'Monitoring', 'type': 'management'}
+    MonitoringCaseManager(requests)

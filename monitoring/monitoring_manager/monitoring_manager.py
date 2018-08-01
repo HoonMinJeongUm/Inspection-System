@@ -18,10 +18,11 @@ class MonitoringManager(VNFMonitorZabbix):
     """
     Monitoring Manager
     """
-    def __init__(self):
+    def __init__(self, vnf):
         super(MonitoringManager, self).__init__()
         self.my_conf = None
         self.name_of_template = "HoonMinJeongUm Template "
+        self.start(vnf)
 
     def start(self, vnf):
         """
@@ -29,7 +30,6 @@ class MonitoringManager(VNFMonitorZabbix):
         :param vnf: I have to fix it later..
         :return: none
         """
-        self.__init__()
         self.read_data()
         self.add_to_appmonitor(vnf)
 
@@ -39,21 +39,22 @@ class MonitoringManager(VNFMonitorZabbix):
         to use monitoring [yaml] template
         :return: none
         """
-        with open('monitoring.yaml', 'r') as files:
+        with open("monitoring_manager/monitoring.yaml", 'r') as files:
             conf = yaml.load(files)
         self.my_conf = self.parse_conf(conf)
         self.listen_testing()
         self.kwargs = {'vdus': {'Name_of_host': {}}}
         self.kwargs['vdus']['Name_of_host'] = self.my_conf['app_monitoring_policy']
 
-    def parse_conf(self, conf):
+    @staticmethod
+    def parse_conf(conf):
         """
         parse the .cfg file into my conf file
         :param conf: default conf file
         :return: completed conf file
         """
         config = ConfigParser.ConfigParser()
-        config.read('monitoring.cfg')
+        config.read("monitoring_manager/monitoring.cfg")
         # check for information section is correct
         try:
             for text in config.sections():
