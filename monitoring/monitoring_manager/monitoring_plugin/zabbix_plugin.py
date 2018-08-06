@@ -18,7 +18,7 @@ import requests
 import time
 
 import copy
-from oslo_log import log as logging
+import logging
 import zabbix_api as zapi
 
 
