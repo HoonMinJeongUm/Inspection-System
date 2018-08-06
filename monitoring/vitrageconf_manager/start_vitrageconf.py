@@ -8,14 +8,14 @@ class Vitrageconf_manager(object):
 
     def __init__(self):
         self.monitoring_tool = "Zabbix"
-        self.server_ip = "192.168.11.121"
+        self.server_ip = "192.168.11.61"
         self.server_port = "22"
         self.server_pass = "Zabbix"
         self.server_user = "admin"
-        self.host_name = ""
-        self.host_type = ""
+        self.host_name = "192.168.11.61"
+        self.host_type = "nova.host"
         self.vm_ip =  ["x.x.x.x","y.y.y.y"]
-        self.vm_id = ["ddd","fff"]
+        self.vm_id = "192.168.11.61"
         self.vm_interface= ["eno1", "eno2"]
 
         self.script = "/opt/stack/Inspection-System/install_agent.sh"                 # use for appending texts to script (real path in which script is locate )
@@ -32,7 +32,7 @@ class Vitrageconf_manager(object):
 
 
         # add zabbix to list of datasources in /etc/vitrage/vitrage.conf
-        subprocess.call(['sed', "-i", "19s/nova.host/zabbix,nova.host/g", self.vitrage_conf])
+        subprocess.call(['sed', "-i", "20s/nova.host/zabbix,nova.host/g", self.vitrage_conf])
 
         # add texts to vitrage_conf file
         subprocess.call("echo '[zabbix]' >> '%s'" % self.vitrage_conf, shell=True)
