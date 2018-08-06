@@ -5,13 +5,34 @@ import json
 
 app = Flask(__name__)
 api=Api(app)
+data2 = {'ip1':'192.168.11.3',
+        'ip2':'192.168.11.31',
+        'mod1':'root',
+        'mod2':'root',
+        'check':'Bottleneck',
+        'test':'netstat -nap | grep ESTAB | wc -l'}
 
-@app.route('/api_gate/<msg>',methods=['POST','PUT'])
-def api_gate(msg):
-    content = request.get_json(silent=True)
-    print content
-    return api_handler.start(content, msg)
-
+@app.route('/api_gate/<msg>/<ip1>/<ip2>/<mod1>/<mod2>/<test>',methods=['POST','PUT'])
+def api_gate(msg,ip1,ip2,mod1,mod2,test):
+    print("############################################")
+    print("###################### GET data : ",msg)
+    print("############################################")
+    print("############################################")
+    print("###################### GET data : ", ip1)
+    print("############################################")
+    print("############################################")
+    print("###################### GET data : ", ip2)
+    print("############################################")
+    print("############################################")
+    print("###################### GET data : ", mod1)
+    print("############################################")
+    print("############################################")
+    print("###################### GET data : ", mod2)
+    print("############################################")
+    print("############################################")
+    print("###################### GET data : ", test)
+    print("############################################")
+    return api_handler.start(msg,ip1,ip2,mod1,mod2,test)
 
 
 # class CreateData(Resource):
