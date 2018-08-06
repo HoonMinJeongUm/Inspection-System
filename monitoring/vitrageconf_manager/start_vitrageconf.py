@@ -21,9 +21,9 @@ class Vitrageconf_manager(object):
         self.script = "/opt/stack/Inspection-System/install_agent.sh"                 # use for appending texts to script (real path in which script is locate )
         self.path_script = "/opt/stack/Inspection-System"                            # path of script
 
-        self.path_vitrage = "/opt/stack/Inspection-System"                           # replace here with /etc/vitrage/
-        self.vitrage_conf = "/opt/stack/Inspection-System/test.conf"  # replace here with /etc/vitrage/vitrage.conf
-        self.zabbix_conf = "/opt/stack/Inspection-System/zabbix_conf.yaml"
+        self.path_vitrage = "/etc/vitrage"                           # replace here with /etc/vitrage
+        self.vitrage_conf = "/etc/vitrage/vitrage.conf"  # replace here with /etc/vitrage/vitrage.conf
+        self.zabbix_conf = "/etc/vitrage/zabbix_conf.yaml"      # replace here with
 
     def decode(self):
          pass
@@ -92,4 +92,4 @@ class Vitrageconf_manager(object):
 
 
 a=Vitrageconf_manager()
-a.make_script()
+a.config_vitrage()
