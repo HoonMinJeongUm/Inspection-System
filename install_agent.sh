@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 sudo apt-get -y update
 sudo apt-get -y upgrade
 sudo apt-get -y install zabbix-agent
@@ -21,3 +23,15 @@ sudo service apache2 restart
 sudo service zabbix-agent restart
 sudo echo "ubuntu:ubuntu" | chpasswd
 sudo echo "root:root" | chpasswd
+
+
+
+## Testing Component Packages install
+sudo apt-get install -y git
+git clone https://github.com/KyleOh/HoonMinJeongUm-TestingPluginScript.git
+
+cd HoonMinJeongUm-TestingPluginScript
+sudo ./nodejs_install.sh
+sudo ./plugin_artillery_install.sh
+sudo ./plugin_locustio_install.sh
+sudo ./plugin_stressng_install.sh

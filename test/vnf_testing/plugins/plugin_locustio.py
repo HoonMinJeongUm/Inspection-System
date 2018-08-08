@@ -42,9 +42,8 @@ def start(hosts=None, auth=None, vnf_testing_args_dict=None):
     if "locustfile" in vnf_testing_args_dict:
         locustio_args_dict["locustfile"] = str(vnf_testing_args_dict['locustfile'])
 
-    cmd = 'echo "{0}" >> locustfile.py'.format(locustio_args_dict["locustfile"])
-
     # get locustfile manually, and make locustfile with start_command
+    cmd = 'echo "{0}" >> locustfile.py'.format(locustio_args_dict["locustfile"])
     listener.start_command(hosts=[hosts], auth=auth, command=cmd)
 
     # vnf_testing_args_dict has the path of locustfile.py
