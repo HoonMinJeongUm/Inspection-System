@@ -8,15 +8,17 @@ class Vitrageconf_manager(object):
 
     def __init__(self):
         self.monitoring_tool = "Zabbix"
-        self.server_ip = "192.168.11.61"
-        self.server_port = "22"
-        self.server_pass = "Zabbix"
-        self.server_user = "admin"
-        self.host_name = "192.168.11.61"
-        self.host_type = "nova.host"
-        self.vm_ip =  ["x.x.x.x","y.y.y.y"]
-        self.vm_id = "192.168.11.61"
-        self.vm_interface= ["eno1", "eno2"]
+        self.server_ip = "192.168.11.121"
+        self.server_port = "80"
+        self.server_pass = "zabbix"
+        self.server_user = "Admin"
+        self.host_name = ""
+        self.host_type = "nova.instance"
+        self.vm_ip =  "192.168.11.6"
+        self.vm_id = "55d67e1c-8c6b-4fae-ba1f-648155491843"
+
+
+        self.vm_interface= "eth0"
 
         self.script = "/opt/stack/Inspection-System/install_agent.sh"                 # use for appending texts to script (real path in which script is locate )
         self.path_script = "/opt/stack/Inspection-System"                            # path of script
@@ -38,7 +40,7 @@ class Vitrageconf_manager(object):
         subprocess.call("echo '[zabbix]' >> '%s'" % self.vitrage_conf, shell=True)
         subprocess.call("echo 'url = http://'%s'/zabbix' >> '%s'" % (self.server_ip, self.vitrage_conf), shell=True)
         subprocess.call("echo 'password = '%s'' >> '%s'" % (self.server_pass, self.vitrage_conf), shell=True)
-        subprocess.call("echo 'user = '%s'' >> '%s'" % (self.server_user,self.vitrage_conf), shell=True)
+        subprocess.call("echo 'user = '%s'' >> '%s'" % (self.server_user, self.vitrage_conf), shell=True)
         subprocess.call("echo 'config_file = /etc/vitrage/zabbix_conf.yaml' >> '%s'" % self.vitrage_conf, shell=True)
 
         # make zabbix_conf.yaml file and add texts
@@ -46,7 +48,12 @@ class Vitrageconf_manager(object):
         subprocess.call("echo 'zabbix:' >> '%s'" % self.zabbix_conf, shell=True)
         subprocess.call("echo '- zabbix_host: '%s'' >> '%s'" % (self.host_name, self.zabbix_conf), shell=True)
         subprocess.call("echo '  type: '%s'' >> '%s'" % (self.host_type, self.zabbix_conf), shell=True)
-        subprocess.call("echo '  name: '%s'' >> '%s'" % (self.vm_id,self.zabbix_conf), shell=True)
+        subprocess.call("echo '  name: '%s'' >> '%s'" % (self.vm_id, self.zabbix_conf), shell=True)
+
+
+        subprocess.call('sudo systemctl restart devstack@vitrage-graph.service', shell=True)
+        subprocess.call('sudo systemctl restart devstack@vitrage-collector.service', shell=True)
+
 
 
     def make_script(self):
@@ -60,13 +67,13 @@ class Vitrageconf_manager(object):
         subprocess.call("echo '\n' >> '%s'" % self.script, shell=True)
 
         subprocess.call("echo 'sudo sed -i \"2s/.*/`ifconfig '%s' | grep \"inet addr:\"| cut -d: -f2 | awk \"{ print $1 }\"`/g\" \"/opt/stack/Inspection-System/testhosts\"' >> '%s'" % (self.vm_interface, self.script), shell=True)           #replace testhosts to /etc/hosts
-        subprocess.call("echo 'sudo sed -i \"s/Bcast/`cat /etc/hostname`/g\" \"/opt/stack/Inspection-System/testhosts\"' >> '%s'" % self.script,shell=True)                                 #replace testhosts to /etc/hosts
+        subprocess.call("echo 'sudo sed -i \"s/Bcast/`cat /etc/hostname`/g\" \"/opt/stack/Inspection-System/testhosts\"' >> '%s'" % self.script, shell=True)                                 #replace testhosts to /etc/hosts
         subprocess.call("echo 'sudo sed -i \"3s/.*/'%s'\\\tmonitor/g\" \"/opt/stack/Inspection-System/testhosts\"' >> '%s'" % (self.vm_ip, self.script), shell=True)                        #replace testhosts to /etc/hosts
         subprocess.call("echo 'sudo /etc/init.d/networking restart' >> '%s'" % self.script, shell=True)
         subprocess.call("echo 'sudo echo \"zabbix ALL=NOPASSWD: ALL\" >> /etc/sudoers' >> '%s'" % self.script, shell=True)
         subprocess.call("echo '\n' >> '%s'" % self.script, shell=True)
 
-        subprocess.call( "echo 'sudo sed -i \"s/# EnableRemoteCommands=0/EnableRemoteCommands=1/\" \"/etc/zabbix/zabbix_agentd.conf\"' >> '%s'" % self.script,shell=True)
+        subprocess.call("echo 'sudo sed -i \"s/# EnableRemoteCommands=0/EnableRemoteCommands=1/\" \"/etc/zabbix/zabbix_agentd.conf\"' >> '%s'" % self.script, shell=True)
         subprocess.call("echo 'sudo sed -i \"s/Server=127.0.0.1/Server='%s'/\" \"/etc/zabbix/zabbix_agentd.conf\"' >> '%s'" % (self.server_ip, self.script), shell=True)
         subprocess.call("echo 'sudo sed -i \"s/ServerActive=127.0.0.1/ServerActive='%s':'%s'/\" \"/etc/zabbix/zabbix_agentd.conf\"' >> '%s'" % (self.server_ip, self.server_port, self.script), shell=True)
         subprocess.call("echo 'sudo sed -i \"s/Hostname=Zabbix server/Hostname=`cat /etc/hostname`/\" \"/etc/zabbix/zabbix_agentd.conf\"' >> '%s'" % self.script, shell=True)
