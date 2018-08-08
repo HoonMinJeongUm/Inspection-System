@@ -35,6 +35,9 @@ class CaseManager(object):
             test_result: A string that is result of the test.
         """
         LOG.debug("Test-case_manager.py start()")
+
+        test_result = None
+
         if case not in CASES:
             # TODO(Jaewook) : Error Log.
             LOG.warning("The case is not in CASES set.")

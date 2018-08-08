@@ -34,9 +34,21 @@ def start(hosts=None, auth=None, vnf_testing_args_dict=None):
         locustio_result: A string that is result of the test.
     """
     LOG.debug("plugin_locustio.py start()")
-    cmd = 'locust -f locustfile.py'
-    # locustfile.py transfer needed
+    locustio_args_dict = {"locustfile": '',
+                          "num": 0,
+                          "target_ip": 0,
+                          }
+
+    if "locustfile" in vnf_testing_args_dict:
+        locustio_args_dict["locustfile"] = str(vnf_testing_args_dict['locustfile'])
+
+    cmd = 'echo "{0}" >> locustfile.py'.format(locustio_args_dict["locustfile"])
+
+    # get locustfile manually, and make locustfile with start_command
+    listener.start_command(hosts=[hosts], auth=auth, command=cmd)
+
     # vnf_testing_args_dict has the path of locustfile.py
+    cmd = 'locust -f locustfile.py'
     locustio_result = listener.start_command(hosts=[hosts], auth=auth, command=cmd)
     # TODO(Jaewook) : How to open new tab for locustio gui page?
     return locustio_result

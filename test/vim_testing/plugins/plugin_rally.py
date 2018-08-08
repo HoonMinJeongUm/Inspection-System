@@ -32,24 +32,17 @@ def start(requestdict):
         LOG.warning('Failed to import Rally')
 
     else:
+        LOG.warning(requestdict)
         temp_dict = json.loads(requestdict)
         key = temp_dict.keys()
-        if not temp_dict['syntaxcheck']:
-            key.remove('syntaxcheck')
-            file_path = './' + key[0] + '.json'
-            with open(file_path, 'w') as make_file:
-                json.dump(temp_dict[key[0]], make_file)
+        # if not temp_dict['syntaxcheck']:
+        #     key.remove('syntaxcheck')
+        file_path = './' + key[0] + '.json'
+        LOG.warning(file_path)
+        with open(file_path, 'w') as make_file:
+            json.dump(temp_dict, make_file)
 
-            rally_task.TaskCommands().start(rally_api.API(),
-                                            file_path,
-                                            tags=['Vitrage', key[0]])
-            os.remove(file_path)
-
-        else:
-            key.remove('syntaxcheck')
-            file_path = './' + key[0] + '.json'
-            with open(file_path, 'w') as make_file:
-                json.dump(temp_dict[key[0]], make_file)
-            rally_task.TaskCommands().validate(rally_api.API(), file_path)
-
-            os.remove(file_path)
+        rally_task.TaskCommands().start(rally_api.API(),
+                                        file_path,
+                                        tags=['Vitrage', key[0]])
+        os.remove(file_path)

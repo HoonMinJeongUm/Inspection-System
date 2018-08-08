@@ -26,6 +26,9 @@ def start(tool, hosts=None, auth=None, vnf_testing_args_dict=None):
         vnf_test_result: A string that is result of the test.
     """
     LOG.debug("vnf_test_manager.py start()")
+
+    vnf_test_result = None
+
     if str(tool) == 'locustio':
         vnf_test_result = plugin_locustio.start(hosts, auth, vnf_testing_args_dict)
     elif str(tool) == 'stressng':
