@@ -12,3 +12,15 @@ def bottleneck(ip1,ip2,mod1,mod2,test):
     _test = _test.replace("_","|")
     c = [a,b,_test]
     return c
+
+def monitoring(tool, ip, port, pas, user, name, type, vm_ip, vm_id):
+    dic_a = {'moitoring tool' :  str(tool),
+             'servier_ip' : str(ip),
+             'server_port' : str(port),
+             'sever_pass' : str(pas),
+             'server_user' : str(user),
+             'host_name ' : str(name),
+             'host_type' : str(type),
+             'vm_ip' : str(vm_ip),
+             'vm_id' : str(vm_id)}
+    return dic_a
