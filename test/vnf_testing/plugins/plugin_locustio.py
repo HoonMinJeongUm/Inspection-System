@@ -35,8 +35,6 @@ def start(hosts=None, auth=None, vnf_testing_args_dict=None):
     """
     LOG.debug("plugin_locustio.py start()")
     locustio_args_dict = {"locustfile": '',
-                          "num": 0,
-                          "target_ip": 0,
                           }
 
     if "locustfile" in vnf_testing_args_dict:
