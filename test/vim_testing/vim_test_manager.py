@@ -19,6 +19,10 @@ def start(tool, requestdict):
         None.
     """
     LOG.debug("vim_test_manager.py start()")
-    if str(tool) == 'rally':
-        plugin_rally.start(requestdict)
 
+    vim_test_result = None
+
+    if str(tool) == 'rally':
+        vim_test_result = plugin_rally.start(requestdict)
+
+    return vim_test_result
