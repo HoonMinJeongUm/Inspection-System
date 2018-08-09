@@ -47,7 +47,7 @@ class CaseManager(object):
             LOG.debug("Test-case_manager.py start() - case 'vim'")
             test_result = vim_test_manager.start(tool, requestdict)
         elif str(case) == 'vnf':
-            LOG.debug("Test-case_manager.py start() - case 'vim'")
+            LOG.debug("Test-case_manager.py start() - case 'vnf'")
             test_result = vnf_test_manager.start(tool, hosts, auth, vnf_testing_args_dict)
 
         return test_result
