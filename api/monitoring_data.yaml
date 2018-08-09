@@ -1,0 +1,45 @@
+Header: [Name of Component]
+type: [1.vitrageconf 2. manager]
+vitrage_conf_policy:
+  monitoring_tool: [Name of Monitoring Tool]
+  server_ip: [Zabbix Server IP]
+  server_port: [Zabbix Server Port]
+  server_pass: [Zabbix Server Password]
+  server_user: [Zabbix user name]
+  vm_ip: [Zabbix Agent IP]
+  vm_id: [VM ID]
+  host_name: [VM host name]
+  host_type: [1.nova.instance / 2. nova.host]
+
+app_monitoring_policy:
+  name: zabbix
+  zabbix_username: [Zabbix user ID]
+  zabbix_password: [Zabbix user Password]
+  zabbix_server_ip: [Zabbix server IP]
+  zabbix_server_port: [Zabbix server Port]
+  mgmt_ip : [Zabbix agent IP]
+  parameters:
+    application:
+      app_name: [application-name]
+      app_port: [application-port]
+      ssh_username: [ssh username in VNF OS]
+      ssh_password: [ssh password in VNF OS]
+      app_status:
+        condition: [comparison,value]
+        usage: [1.true / 2. false]
+      app_memory:
+        condition: [comparison,value]
+        usage: [1.true / 2. false]
+    OS:
+      os_agent_info:
+        condition: [comparison,value]
+        usage: [1.true / 2. false]
+      os_proc_value:
+        condition: [comparison,value]
+        usage: [1.true / 2. false]
+      os_cpu_load:
+        condition: [comparison,value]
+        usage: [1.true / 2. false]
+      os_cpu_usage:
+        condition: [comparison,value]
+        usage: [1.true / 2. false]

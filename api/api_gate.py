@@ -10,9 +10,19 @@ api=Api(app)
 def api_bottleneck(ip1,ip2,mod1,mod2,test):
     return api_handler.start_bottleneck('Bottleneck',ip1,ip2,mod1,mod2,test)
 
-@app.route('/api_gate/Monitoring/<tool>/<ip>/<port>/<pas>/<user>/<name>/<type>/<vm_ip>/<vm_id>',methods=['POST','PUT'])
-def api_monitoring(tool,ip,port,pas,user,name,type,vm_ip,vm_id):
-    return api_handler.start_monitoring(tool,ip,port,pas,user,name,type,vm_ip,vm_id)
+# @app.route('/api_gate/Monitoring/<tool>/<ip>/<port>/<pas>/<user>/<name>/<type>/<vm_ip>/<vm_id>',methods=['POST','PUT'])
+# def api_monitoring(tool,ip,port,pas,user,name,type,vm_ip,vm_id):
+#     return api_handler.start_monitoring(tool,ip,port,pas,user,name,type,vm_ip,vm_id)
+
+@app.route('/api_gate/Monitoring/<header>/<type>/<a>/<b>/<c>/<d>/<e>/<f>/<g>/<h>/<i>/<k>/<l>/<m>/<n>/<o>/<p>/<q>/<r>/<s>/<t>/<u>/<v>/<w>/<x>/<y>/<z>/<a1>/<b1>/<c1>/<d1>/<e1>/<f1>/<g1>/<h1>/<i1>/<j1>/<k1>',methods=['POST','PUT'])
+def api_monitoring_initiate(header,type,a,b,c,d,e,f,g,h,i,
+                            k,l,m,n,o,
+                            p,q,r,s,t,u,v,w,x,y,
+                            z,a1,b1,c1,d1,e1,f1,g1,h1,i1,j1,k1):
+    return api_handler.start_monitoring_service(header,type,a,b,c,d,e,f,g,h,i,
+                            k,l,m,n,o,
+                            p,q,r,s,t,u,v,w,x,y,
+                            z,a1,b1,c1,d1,e1,f1,g1,h1,i1,j1,k1)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',
