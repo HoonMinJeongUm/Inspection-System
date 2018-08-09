@@ -77,7 +77,7 @@ class MonitoringManager(VNFMonitorZabbix):
         for topic in config.options('APP'):
             parse_app = config.get('APP', topic)
             parse_app = ast.literal_eval(parse_app)
-            if parse_app['status'] == "true":
+            if parse_app['usage'] == "true":
                 conf['app_monitoring_policy']['parameters']['application'][topic]['actionname'] \
                     = 'cmd'
                 conf['app_monitoring_policy']['parameters']['application'][topic]['cmd-action'] \
@@ -90,7 +90,7 @@ class MonitoringManager(VNFMonitorZabbix):
         for topic in config.options('OS'):
             parse_os = config.get('OS', topic)
             parse_os = ast.literal_eval(parse_os)
-            if parse_os['status'] == "true":
+            if parse_os['usage'] == "true":
                 conf['app_monitoring_policy']['parameters']['OS'][topic]['actionname'] = 'cmd'
                 conf['app_monitoring_policy']['parameters']['OS'][topic]['cmd-action'] \
                     = parse_os['cmd-action']
