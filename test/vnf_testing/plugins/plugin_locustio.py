@@ -31,11 +31,11 @@ def start(hosts=None, auth=None, vnf_testing_args_dict=None):
         vnf_testing_args_dict: A dictionary of arguments used to execute the vnf testing plugins.
 
     Returns:
-        locustio_result: A string that is result of the test.
+        locustio_result: A string that is locustio url.
     """
     LOG.debug("plugin_locustio.py start()")
-    locustio_args_dict = {"locustfile": '',
-                          }
+    locustio_args_dict = {"locustfile": 'from locust import Locust, TaskSet, task\nclass MyTaskSet(TaskSet):\n\t@task\n\tdef my_task(self):\n\t\tprint("executing my_task")\n\nclass MyLocust(Locust):\n\ttask_set = MyTaskSet\n\tmin_wait = 5000\n\tmax_wait = 15000',
+                        }
 
     if "locustfile" in vnf_testing_args_dict:
         locustio_args_dict["locustfile"] = str(vnf_testing_args_dict['locustfile'])
@@ -46,6 +46,8 @@ def start(hosts=None, auth=None, vnf_testing_args_dict=None):
 
     # vnf_testing_args_dict has the path of locustfile.py
     cmd = 'locust -f locustfile.py'
-    locustio_result = listener.start_command(hosts=[hosts], auth=auth, command=cmd)
+    listener.start_command(hosts=[hosts], auth=auth, command=cmd)
     # TODO(Jaewook) : How to open new tab for locustio gui page?
+    locustio_result = "http://{0}:5559".format(hosts)
+
     return locustio_result
