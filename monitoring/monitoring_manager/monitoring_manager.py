@@ -18,9 +18,9 @@ class MonitoringManager(VNFMonitorZabbix):
     """
     Monitoring Manager
     """
-    def __init__(self):
+    def __init__(self, request):
         super(MonitoringManager, self).__init__()
-        self.my_conf = None
+        self.my_conf = request
         self.name = None
         self.name_of_template = "HoonMinJeongUm Template "
         self.start()
@@ -40,13 +40,17 @@ class MonitoringManager(VNFMonitorZabbix):
         to use monitoring [yaml] template
         :return: none
         """
-        with open("monitoring_manager/monitoring_manager.yaml", 'r') as files:
-            conf = yaml.load(files)
-        self.my_conf = self.parse_conf(conf)
+        # parsing test code in 3 lines
+        # with open("monitoring_manager/monitoring_manager.yaml", 'r') as files:
+        #     conf = yaml.load(files)
+        # self.my_conf = self.parse_conf(conf)
+
+        # waiting for testing result
         self.listen_testing()
         # name_parse
         self.name = self.my_conf['app_monitoring_policy']['vnf_name']
         del self.my_conf['app_monitoring_policy']['vnf_name']
+        # data input
         self.kwargs = {'vdus': {self.name: {}}}
         self.kwargs['vdus'][self.name] = self.my_conf['app_monitoring_policy']
 

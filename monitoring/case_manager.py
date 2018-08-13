@@ -27,7 +27,7 @@ class MonitoringCaseManager(object):
             self.request = request
             if self.request['type'] is 'vitrageconf':
                 self.start_vitrageconf()
-            elif self.request['type'] is 'management':
+            elif self.request['type'] is 'manager':
                 self.start_management()
             else:
                 MonitorLog.warning("Wrong data type. Please rewrite the type.")
@@ -36,8 +36,11 @@ class MonitoringCaseManager(object):
         pass
 
     def start_management(self):
-        # temporary vnf data model
-        MonitoringManager()
+        """
+        to do testing delete [self.request]
+        :return: complete zabbix api result
+        """
+        MonitoringManager(self.request)
 
 
 if __name__ == '__main__':
