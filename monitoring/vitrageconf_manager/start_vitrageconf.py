@@ -3,30 +3,30 @@ import subprocess
 from ssh_manager import listener
 
 
-class Vitrageconf_manager(object):
+class VitrageconfManager(object):
 
     def __init__(self, request):
-        # self.monitoring_tool = "Zabbix"
-        # self.server_ip = "192.168.11.121"
-        # self.server_port = "80"
-        # self.server_pass = "zabbix"
-        # self.server_user = "Admin"
-        # self.host_name = "VM15824"
-        # self.host_type = "nova.instance"
-        # self.vm_ip =  "192.168.11.6"
-        # self.vm_id = "55d67e1c-8c6b-4fae-ba1f-648155491843"
-        #self.vm_interface= "eth0"
-        #
+        self.monitoring_tool = None
+        self.server_ip = None
+        self.server_port = None
+        self.server_pass = None
+        self.server_user = None
+        self.host_name = None
+        self.host_type = None
+        self.vm_ip =  None
+        self.vm_id = None
+        self.vm_interface= None
+
         self.script = "/opt/stack/Inspection-System/install_agent.sh"                 # use for appending texts to script (real path in which script is locate )
         self.path_script = "/opt/stack/Inspection-System"                            # path of script
-        #
+        self.data = None
+
         self.path_vitrage = "/etc/vitrage"                           # replace here with /etc/vitrage
         self.vitrage_conf = "/etc/vitrage/vitrage.conf"  # replace here with /etc/vitrage/vitrage.conf
         self.zabbix_conf = "/etc/vitrage/zabbix_conf.yaml"      # replace here with
 
         self.request = request
-        self.decode()
-        self.start()
+
 
     def decode(self):
         self.data = self.request['vitrage_conf_policy']
@@ -41,9 +41,7 @@ class Vitrageconf_manager(object):
         self.vm_id = self.data['vm_id']
         self.vm_interface = self.data['vm_interface']
 
-    def config_vitrage(self):
-
-
+    def start_config(self):
         # add zabbix to list of datasources in /etc/vitrage/vitrage.conf
         subprocess.call(['sed', "-i", "20s/nova.host/zabbix,nova.host/g", self.vitrage_conf])
 
@@ -64,8 +62,6 @@ class Vitrageconf_manager(object):
 
         subprocess.call('sudo systemctl restart devstack@vitrage-graph.service', shell=True)
         subprocess.call('sudo systemctl restart devstack@vitrage-collector.service', shell=True)
-
-
 
     def make_script(self):
 
@@ -98,24 +94,10 @@ class Vitrageconf_manager(object):
         # os.chmod("%s/install_agent" %path,0777)     #make <install_agent> shell script execute
         #ssh_manager.listener.start_script(self.vm_ip,self. )  # hosts,auth,file_name,local_path,remote_path
 
-
-    def start(self):
+    def start_script(self):
+        self.decode()
         if self.monitoring_tool == "Zabbix" :
             self.make_script()
+            listener.start_script([self.vm_ip], ['ubuntu'], "install_agent.sh", self.path_script, "/opt/stack/test")
 
 
-            listener.start_script()
-            self.config_vitrage()
-
-
-
-
-
-
-
-
-
-
-
-a=Vitrageconf_manager()
-a.config_vitrage()

@@ -44,7 +44,7 @@ class MonitoringManager(VNFMonitorZabbix):
         # with open("monitoring_manager/monitoring_manager.yaml", 'r') as files:
         #     conf = yaml.load(files)
         # self.my_conf = self.parse_conf(conf)
-
+        self.parse_status()
         # waiting for testing result
         self.listen_testing()
         # name_parse
@@ -106,6 +106,35 @@ class MonitoringManager(VNFMonitorZabbix):
                 del conf['app_monitoring_policy']['parameters']['OS'][topic]
 
         return conf
+
+    def parse_status(self):
+        # parse the application information
+        if self.my_conf['app_monitoring_policy']['parameters']['application']['app_status']['usage'] :
+            self.my_conf['app_monitoring_policy']['parameters']['application']['app_status']['actionname'] \
+                 = 'cmd'
+            self.my_conf['app_monitoring_policy']['parameters']['application']['app_status']['cmd-action'] \
+                = 'None'
+            del self.my_conf['app_monitoring_policy']['parameters']['application']['app_status']['usage']
+        else:
+            del self.my_conf['app_monitoring_policy']['parameters']['application']['app_status']
+
+        if self.my_conf['app_monitoring_policy']['parameters']['application']['app_memory']['usage'] :
+            self.my_conf['app_monitoring_policy']['parameters']['application']['app_memory']['actionname'] \
+                 = 'cmd'
+            self.my_conf['app_monitoring_policy']['parameters']['application']['app_memory']['cmd-action'] \
+                = 'None'
+            del self.my_conf['app_monitoring_policy']['parameters']['application']['app_memory']['usage']
+        else:
+            del self.my_conf['app_monitoring_policy']['parameters']['application']['app_memory']
+        # parse the os information
+        for topic in self.my_conf['app_monitoring_policy']['parameters']['OS']:
+            if self.my_conf['app_monitoring_policy']['parameters']['OS'][topic]['usage'] :
+                self.my_conf['app_monitoring_policy']['parameters']['OS'][topic]['actionname'] = 'cmd'
+                self.my_conf['app_monitoring_policy']['parameters']['OS'][topic]['cmd-action'] \
+                    = 'None'
+                del self.my_conf['app_monitoring_policy']['parameters']['OS'][topic]['usage']
+            else:
+                del self.my_conf['app_monitoring_policy']['parameters']['OS'][topic]
 
     def listen_testing(self):
         """

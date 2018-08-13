@@ -28,6 +28,5 @@ test_kwargs = {'vdus': {'Zabbix_client':
                              'zabbix_server_port': 80,
                              'mgmt_ip': '192.168.56.103'}}}
 
-test = MonitoringManager()
-pdb.set_trace()
-test.start(test_vnf)
+test_kwargs['vdus']['Zabbix_client']['parameters']['application']['app_status']['query'] = 'hi'
+print test_kwargs
