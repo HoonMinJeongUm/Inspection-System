@@ -1,34 +1,45 @@
 
 import subprocess
-#import ssh_manager.listener
-
+from ssh_manager import listener
 
 
 class Vitrageconf_manager(object):
 
-    def __init__(self):
-        self.monitoring_tool = "Zabbix"
-        self.server_ip = "192.168.11.121"
-        self.server_port = "80"
-        self.server_pass = "zabbix"
-        self.server_user = "Admin"
-        self.host_name = "VM15824"
-        self.host_type = "nova.instance"
-        self.vm_ip =  "192.168.11.6"
-        self.vm_id = "55d67e1c-8c6b-4fae-ba1f-648155491843"
-
-
-        self.vm_interface= "eth0"
-
+    def __init__(self, request):
+        # self.monitoring_tool = "Zabbix"
+        # self.server_ip = "192.168.11.121"
+        # self.server_port = "80"
+        # self.server_pass = "zabbix"
+        # self.server_user = "Admin"
+        # self.host_name = "VM15824"
+        # self.host_type = "nova.instance"
+        # self.vm_ip =  "192.168.11.6"
+        # self.vm_id = "55d67e1c-8c6b-4fae-ba1f-648155491843"
+        #self.vm_interface= "eth0"
+        #
         self.script = "/opt/stack/Inspection-System/install_agent.sh"                 # use for appending texts to script (real path in which script is locate )
         self.path_script = "/opt/stack/Inspection-System"                            # path of script
-
+        #
         self.path_vitrage = "/etc/vitrage"                           # replace here with /etc/vitrage
         self.vitrage_conf = "/etc/vitrage/vitrage.conf"  # replace here with /etc/vitrage/vitrage.conf
         self.zabbix_conf = "/etc/vitrage/zabbix_conf.yaml"      # replace here with
 
-    def decode(self, data):
-        self.
+        self.request = request
+        self.decode()
+        self.start()
+
+    def decode(self):
+        self.data = self.request['vitrage_conf_policy']
+        self.monitoring_tool = self.data['monitoring_tool']
+        self.server_ip = self.data['server_ip']
+        self.server_port = self.data['server_port']
+        self.server_pass = self.data['server_pass']
+        self.server_user = self.data['server_user']
+        self.host_name = self.data['host_name']
+        self.host_type = self.data['host_type']
+        self.vm_ip = self.data['vm_ip']
+        self.vm_id = self.data['vm_id']
+        self.vm_interface = self.data['vm_interface']
 
     def config_vitrage(self):
 
@@ -89,12 +100,20 @@ class Vitrageconf_manager(object):
 
 
     def start(self):
-        self.decode()
-        self.test_if()
-
-        if self.monitoring_tool == "Zabbix":
+        if self.monitoring_tool == "Zabbix" :
             self.make_script()
+
+
+            listener.start_script()
             self.config_vitrage()
+
+
+
+
+
+
+
+
 
 
 

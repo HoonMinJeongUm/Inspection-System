@@ -1,4 +1,0 @@
-zabbix:
-- zabbix_host: 
-  type: 
-  name: [ddd, fff]
