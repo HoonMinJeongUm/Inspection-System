@@ -18,11 +18,10 @@ class MonitoringManager(VNFMonitorZabbix):
     """
     Monitoring Manager
     """
-    def __init__(self, vnf, name):
+    def __init__(self, name):
         super(MonitoringManager, self).__init__()
         self.my_conf = None
         self.name = name
-        self.vnf = vnf
         self.name_of_template = "HoonMinJeongUm Template "
         self.start()
 
@@ -147,7 +146,21 @@ class MonitoringManager(VNFMonitorZabbix):
             self.hostinfo[vdu]['template_name'] =\
                 temp_template_api['params']['host']
 
+    def set_vdu_info(self):
+        temp_vduname = self.kwargs['vdus'].keys()
+        for node in temp_vduname:
+            if 'application' in \
+                    self.kwargs['vdus'][node]['parameters'].keys() \
+                    or 'OS' \
+                    in self.kwargs['vdus'][node]['parameters'].keys():
+                self.vduname.append(node)
+                self.hostinfo[node] = copy.deepcopy(zapi.dVDU_INFO)
+                self.set_zbx_info(node)
+                self.hostinfo[node]['mgmt_ip'] = \
+                    self.kwargs['vdus'][node]['mgmt_ip']
+                self.hostinfo[node]['parameters'] = \
+                    self.kwargs['vdus'][node]['parameters']
+
     def add_to_appmonitor(self):
         self.set_vdu_info()
-        self.tenant_id = self.vnf['vnfd']['tenant_id']
         self.add_host_to_zabbix()
