@@ -45,8 +45,8 @@ class MonitoringManager(VNFMonitorZabbix):
         self.my_conf = self.parse_conf(conf)
         self.listen_testing()
         # name_parse
-        self.name = self.my_conf['app_monitoring_policy']['VNF_name']
-        del self.my_conf['app_monitoring_policy']['VNF_name']
+        self.name = self.my_conf['app_monitoring_policy']['vnf_name']
+        del self.my_conf['app_monitoring_policy']['vnf_name']
         self.kwargs = {'vdus': {self.name: {}}}
         self.kwargs['vdus'][self.name] = self.my_conf['app_monitoring_policy']
 

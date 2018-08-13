@@ -1,6 +1,6 @@
 app_monitoring_policy:
   name: zabbix
-  VNF_name: [Monitoring object name ]
+  vnf_name: [Monitoring object name ]
   zabbix_username: [Zabbix user ID]
   zabbix_password: [Zabbix user Password]
   zabbix_server_ip: [Zabbix server IP]
