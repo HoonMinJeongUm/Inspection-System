@@ -12,7 +12,7 @@ class Vitrageconf_manager(object):
         self.server_port = "80"
         self.server_pass = "zabbix"
         self.server_user = "Admin"
-        self.host_name = ""
+        self.host_name = "VM15824"
         self.host_type = "nova.instance"
         self.vm_ip =  "192.168.11.6"
         self.vm_id = "55d67e1c-8c6b-4fae-ba1f-648155491843"
@@ -27,8 +27,8 @@ class Vitrageconf_manager(object):
         self.vitrage_conf = "/etc/vitrage/vitrage.conf"  # replace here with /etc/vitrage/vitrage.conf
         self.zabbix_conf = "/etc/vitrage/zabbix_conf.yaml"      # replace here with
 
-    def decode(self):
-         pass
+    def decode(self, data):
+        self.
 
     def config_vitrage(self):
 
