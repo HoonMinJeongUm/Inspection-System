@@ -1,5 +1,4 @@
 Header: [Name of Component]
-type: [1.vitrageconf 2. manager]
 vitrage_conf_policy:
   monitoring_tool: [Name of Monitoring Tool]
   server_ip: [Zabbix Server IP]
@@ -10,10 +9,11 @@ vitrage_conf_policy:
   vm_id: [VM ID]
   host_name: [VM host name]
   host_type: [1.nova.instance / 2. nova.host]
+  vm_interface: [VM Interface]
 
 app_monitoring_policy:
   name: zabbix
-  vnf_name: [Monitoring object name]
+  host_name: [VM host name]
   zabbix_username: [Zabbix user ID]
   zabbix_password: [Zabbix user Password]
   zabbix_server_ip: [Zabbix server IP]
