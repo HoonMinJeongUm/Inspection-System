@@ -37,9 +37,7 @@ class MonitoringCaseManager(object):
 
     def start_management(self):
         # temporary vnf data model
-        vnf = {'vnfd': {'tenant_id': u'd1e6919c73074d18ab6cd49a02e08391'},
-                    'id': 'b9af3cb5-6e43-4b2c-a056-67bda3f71e1a'}
-        MonitoringManager(vnf, "VM1")
+        MonitoringManager()
 
 
 if __name__ == '__main__':
