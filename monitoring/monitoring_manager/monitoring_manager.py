@@ -6,7 +6,6 @@ import monitoring_plugin.zabbix_api as zapi
 import time
 import ConfigParser
 import logging, sys
-import yaml
 import copy
 import ast
 

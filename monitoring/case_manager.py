@@ -3,10 +3,6 @@
 from monitoring_manager.monitoring_manager import MonitoringManager
 from vitrageconf_manager.start_vitrageconf import VitrageconfManager
 import logging
-import yaml
-
-
-MonitorLog = logging.getLogger("MonitorLog")
 
 
 class MonitoringCaseManager(object):
@@ -14,34 +10,45 @@ class MonitoringCaseManager(object):
     Case management of monitoring
     """
     def __init__(self, request):
+        self.MonitorLog = logging.getLogger("Monitoring Component")
+        formatter = logging.Formatter('[%(levelname)s - %(name)s](%(asctime)s) : %(message)s')
+        handler = logging.StreamHandler()
+        handler.setFormatter(formatter)
+        self.MonitorLog.addHandler(handler)
+
         try:
             if request['header'] is not "Monitoring":
                 raise KeyError
         except KeyError:
-            MonitorLog.error("Header is wrong. Please check again.")
+            self.MonitorLog.error("Header is wrong. Please check again.")
         else:
             self.request = request
-            a = VitrageconfManager(request)
-            a.start_script()
+            self.vitrage = VitrageconfManager(self.request)
+            self.set_vitrage()
             self.start_management()
-            a.start_config()
+            self.start_vitrage_config()
             self.finish()
+
+    def set_vitrage(self):
+        """
+        setting the zabbix configuration and send script to VM
+        :return: None
+        """
+        self.vitrage.start_script()
+
+    def start_vitrage_config(self):
+        """
+        setting the Vitrage between Zabbix connection, then restart the devstack service
+        :return: None
+        """
+        self.vitrage.start_config()
 
     def start_management(self):
         """
-        to do testing delete [self.request]
-        :return: complete zabbix api result
+        setting the Zabbix agent monitoring Item, trigger, graph, template to the Zabbix Server
+        :return: None
         """
         MonitoringManager(self.request)
 
     def finish(self):
         pass
-
-
-if __name__ == '__main__':
-    with open("test_monitoring.yaml", 'r') as files:
-        conf = yaml.load(files)
-    conf['header'] = 'Monitoring'
-    MonitoringCaseManager(conf)
-
-
