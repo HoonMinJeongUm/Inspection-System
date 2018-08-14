@@ -70,7 +70,7 @@ def start(hosts=None, auth=None, vnf_testing_args_dict=None):
     artillery_result = artillery_raw_result.replace("\x1b[2K\x1b[1G\x1b[36m⠋\x1b[39m", "")
     artillery_result = artillery_result.replace("[192.168.9.211]", "")
     artillery_result = artillery_result.replace("out:", "")
-    artillery_result = artillery_result.replace("\n", "")
+    #artillery_result = artillery_result.replace("\n", "")
     artillery_result = artillery_result.replace("\x1b[2K", "")
     artillery_result = artillery_result.replace("\x1b[1G", "")
     artillery_result = artillery_result.replace("\x1b[36m", "")
