@@ -8,9 +8,7 @@ import ConfigParser
 import logging, sys
 import copy
 import ast
-
-
-ManagerLogger = logging.getLogger(__name__)
+import yaml
 
 
 class MonitoringManager(VNFMonitorZabbix):
@@ -19,6 +17,11 @@ class MonitoringManager(VNFMonitorZabbix):
     """
     def __init__(self, request):
         super(MonitoringManager, self).__init__()
+        self.ManagerLog = logging.getLogger("Monitoring Manager")
+        formatter = logging.Formatter('[%(levelname)s - %(name)s](%(asctime)s) : %(message)s')
+        handler = logging.StreamHandler()
+        handler.setFormatter(formatter)
+        self.ManagerLog.addHandler(handler)
         self.my_conf = request
         self.name = None
         self.name_of_template = "HoonMinJeongUm Template "
@@ -43,9 +46,17 @@ class MonitoringManager(VNFMonitorZabbix):
         # with open("monitoring_manager/monitoring_manager.yaml", 'r') as files:
         #     conf = yaml.load(files)
         # self.my_conf = self.parse_conf(conf)
+        try:
+            if not self.my_conf['app_monitoring_policy']:
+                raise KeyError
+        except KeyError:
+            self.ManagerLog.error("No data for Monitoring manager")
+            sys.exit(1)
+
         self.parse_status()
         # waiting for testing result
         self.listen_testing()
+        self.data_check()
         # name_parse
         self.name = self.my_conf['app_monitoring_policy']['host_name']
         del self.my_conf['app_monitoring_policy']['host_name']
@@ -53,8 +64,7 @@ class MonitoringManager(VNFMonitorZabbix):
         self.kwargs = {'vdus': {self.name: {}}}
         self.kwargs['vdus'][self.name] = self.my_conf['app_monitoring_policy']
 
-    @staticmethod
-    def parse_conf(conf):
+    def parse_conf(self, conf):
         """
         parse the .cfg file into my conf file
         :param conf: default conf file
@@ -68,7 +78,7 @@ class MonitoringManager(VNFMonitorZabbix):
                 if text != "INFO" and text != "APP_INFO" and text != "APP" and text != "OS":
                     raise KeyError
         except KeyError:
-            ManagerLogger.error("Missing Information of Zabbix API")
+            self.ManagerLog.error("Missing Information of Zabbix API")
             sys.exit(1)
 
         # parse the basic_information
@@ -107,8 +117,12 @@ class MonitoringManager(VNFMonitorZabbix):
         return conf
 
     def parse_status(self):
+        """
+        Based by status information, this module write more information for zabbix_plugin
+        :return:
+        """
         # parse the application information
-        if self.my_conf['app_monitoring_policy']['parameters']['application']['app_status']['usage'] :
+        if self.my_conf['app_monitoring_policy']['parameters']['application']['app_status']['usage'] == 'true':
             self.my_conf['app_monitoring_policy']['parameters']['application']['app_status']['actionname'] \
                  = 'cmd'
             self.my_conf['app_monitoring_policy']['parameters']['application']['app_status']['cmd-action'] \
@@ -117,7 +131,7 @@ class MonitoringManager(VNFMonitorZabbix):
         else:
             del self.my_conf['app_monitoring_policy']['parameters']['application']['app_status']
 
-        if self.my_conf['app_monitoring_policy']['parameters']['application']['app_memory']['usage'] :
+        if self.my_conf['app_monitoring_policy']['parameters']['application']['app_memory']['usage'] == 'true':
             self.my_conf['app_monitoring_policy']['parameters']['application']['app_memory']['actionname'] \
                  = 'cmd'
             self.my_conf['app_monitoring_policy']['parameters']['application']['app_memory']['cmd-action'] \
@@ -127,7 +141,7 @@ class MonitoringManager(VNFMonitorZabbix):
             del self.my_conf['app_monitoring_policy']['parameters']['application']['app_memory']
         # parse the os information
         for topic in self.my_conf['app_monitoring_policy']['parameters']['OS']:
-            if self.my_conf['app_monitoring_policy']['parameters']['OS'][topic]['usage'] :
+            if self.my_conf['app_monitoring_policy']['parameters']['OS'][topic]['usage'] == 'true':
                 self.my_conf['app_monitoring_policy']['parameters']['OS'][topic]['actionname'] = 'cmd'
                 self.my_conf['app_monitoring_policy']['parameters']['OS'][topic]['cmd-action'] \
                     = 'None'
@@ -156,7 +170,21 @@ class MonitoringManager(VNFMonitorZabbix):
         elif test_result < 10:
             pass
         else:
-            ManagerLogger.warning("Testing result is wrong. Not fix condition")
+            self.ManagerLogger.warning("Testing result is wrong. Not fix condition")
+
+    def data_check(self):
+        """
+        before using zaabix_plugin check all data
+        if data is wrong, print the log and program exit
+        :return: None
+        """
+        for topic in self.my_conf['app_monitoring_policy']:
+            try:
+                if not self.my_conf['app_monitoring_policy'][topic]:
+                    raise KeyError
+            except KeyError:
+                self.ManagerLog.error("Missing Key in [%s]" % topic)
+                sys.exit(1)
 
     def create_template(self):
         temp_template_api = copy.deepcopy(zapi.dTEMPLATE_CREATE_API)
@@ -199,3 +227,10 @@ class MonitoringManager(VNFMonitorZabbix):
     def add_to_appmonitor(self):
         self.set_vdu_info()
         self.add_host_to_zabbix()
+
+
+if __name__ == '__main__':
+    with open("monitoring_manager.yaml", 'r') as files:
+        conf = yaml.load(files)
+
+    MonitoringManager(conf)

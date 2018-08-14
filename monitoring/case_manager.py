@@ -2,7 +2,7 @@
 
 from monitoring_manager.monitoring_manager import MonitoringManager
 from vitrageconf_manager.start_vitrageconf import VitrageconfManager
-import logging
+import logging, sys
 
 
 class MonitoringCaseManager(object):
@@ -21,6 +21,7 @@ class MonitoringCaseManager(object):
                 raise KeyError
         except KeyError:
             self.MonitorLog.error("Header is wrong. Please check again.")
+            sys.exit(1)
         else:
             self.request = request
             self.vitrage = VitrageconfManager(self.request)
