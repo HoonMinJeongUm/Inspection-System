@@ -87,3 +87,25 @@ def monitoring_manager(header,type,
     conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['value'] = str(ocu_condition_val)
     conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['usage'] = str(ocu_usage)
     return conf
+
+def test_auth(auth1,auth2):
+    auth1_1 = str(auth1)
+    auth2_2 = str(auth2)
+    return [auth1_1, auth2_2]
+
+def test_vnf_dict(tool,f_data1,f_data2,f_data3,f_data4,f_data5,f_data6):
+    test_data = str(tool)
+    if test_data == 'locustio':
+        a = {'locustfile' : str(f_data1)}
+    elif test_data == 'stressng' :
+        a = {"cpu" : int(f_data1),
+             "vm" : int(f_data2),
+             "vm_bytes" : str(f_data3),
+             "hdd" : int(f_data4),
+             "hdd_bytes" : str(f_data5),
+             "timeout" : str(f_data6)}
+    elif test_data == 'artillery':
+        a = {'count' : int(f_data1),
+             'num' : int(f_data2),
+             'target_ip' : str(f_data3)}
+    return a
