@@ -3,7 +3,7 @@
 from monitoring_manager.monitoring_manager import MonitoringManager
 from vitrageconf_manager.start_vitrageconf import VitrageconfManager
 import logging, sys
-
+import yaml
 
 class MonitoringCaseManager(object):
     """
@@ -53,3 +53,9 @@ class MonitoringCaseManager(object):
 
     def finish(self):
         pass
+
+
+if __name__ == '__main__':
+    with open("monitoring_data.yaml", 'r') as files:
+        conf = yaml.load(files)
+    MonitoringCaseManager(conf)

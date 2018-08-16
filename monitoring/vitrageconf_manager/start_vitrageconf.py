@@ -72,7 +72,6 @@ class VitrageconfManager(object):
         # os.chmod("%s/install_agent" %path,0777)     #make <install_agent> shell script execute
         #ssh_manager.listener.start_script(self.vm_ip,self. )  # hosts,auth,file_name,local_path,remote_path
 
-
     def start_config(self):
         # add zabbix to list of datasources in /etc/vitrage/vitrage.conf
         subprocess.call(['sed', "-i", "20s/nova.host/zabbix,nova.host/g", self.vitrage_conf])
@@ -104,5 +103,5 @@ class VitrageconfManager(object):
         if self.monitoring_tool == "Zabbix" :
             self.make_script()
             listener.start_script([self.vm_ip], ['ubuntu','ubuntu'], "install_agent.sh", self.path_script, "/opt/stack/test")
-
+            listener.start_command([self.vm_ip], ['ubuntu','ubuntu'], './install_agent.sh')
 
