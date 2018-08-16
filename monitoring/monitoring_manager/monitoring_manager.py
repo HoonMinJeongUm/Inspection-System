@@ -26,6 +26,7 @@ class MonitoringManager(VNFMonitorZabbix):
         self.name = None
         self.name_of_template = "HoonMinJeongUm Template "
         self.start()
+        self.complete()
 
     def start(self):
         """
@@ -148,6 +149,12 @@ class MonitoringManager(VNFMonitorZabbix):
                 del self.my_conf['app_monitoring_policy']['parameters']['OS'][topic]['usage']
             else:
                 del self.my_conf['app_monitoring_policy']['parameters']['OS'][topic]
+
+    @staticmethod
+    def complete():
+        print("=================================================================")
+        print("                 Monitoring Manager Complete                     ")
+        print("=================================================================")
 
     def listen_testing(self):
         """

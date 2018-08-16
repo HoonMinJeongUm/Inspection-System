@@ -52,7 +52,9 @@ class MonitoringCaseManager(object):
         MonitoringManager(self.request)
 
     def finish(self):
-        pass
+        print("===============================================================")
+        print("               Monitoring Component Complete                   ")
+        print("===============================================================")
 
 
 if __name__ == '__main__':

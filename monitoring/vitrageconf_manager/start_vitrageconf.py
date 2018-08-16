@@ -100,8 +100,8 @@ class VitrageconfManager(object):
 
     def start_script(self):
         self.decode()
-        if self.monitoring_tool == "Zabbix" :
+        if self.monitoring_tool == "Zabbix":
             self.make_script()
-            listener.start_script([self.vm_ip], ['ubuntu','ubuntu'], "install_agent.sh", self.path_script, "/opt/stack/test")
-            listener.start_command([self.vm_ip], ['ubuntu','ubuntu'], './install_agent.sh')
+            listener.start_script([self.vm_ip], ['ubuntu','ubuntu'], "install_agent.sh", self.path_script, "/home/ubuntu")
+
 
