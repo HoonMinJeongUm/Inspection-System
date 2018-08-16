@@ -38,7 +38,7 @@ def start(hosts=None, auth=None, vnf_testing_args_dict=None):
                         }
 
     if "locustfile" in vnf_testing_args_dict:
-        locust_string = str(vnf_testing_args_dict['locsutfile']).replace("NL", "\n")
+        locust_string = str(vnf_testing_args_dict['locustfile']).replace("NL", "\n")
         locustio_args_dict["locustfile"] = str(vnf_testing_args_dict['locustfile'])
 
     # get locustfile manually, and make locustfile with start_command
