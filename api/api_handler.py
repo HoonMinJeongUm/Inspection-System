@@ -15,25 +15,16 @@ def start_bottleneck(msg,ip1,ip2,mod1,mod2,test):
     sortdata = api_arrange.bottleneck(ip1,ip2,mod1,mod2,test)
     return call_case(msg,sortdata)
 
-def start_monitoring_service(header,type,a,b,c,d,e,f,g,h,i,
+def start_monitoring_service(tool,b,c,d,e,f,g,h,i,
                             k,l,m,n,o,
-                            p,q,r,s,t,u,v,w,x,y,
-                            z,a1,b1,c1,d1,e1,f1,g1,h1,i1,j1,k1):
-    if header == 'vitrageconf':
-        conf = api_arrange.monitoring_vitrageconf(header,type,a,b,c,d,e,f,g,h,i)
-        print('#################################################')
-        print(conf)
-        print('#################################################')
-        return 'test1'
-    elif header=='manager':
-        conf = api_arrange.monitoring_manager(header,type,
-                                              k, l, m, n, o,
-                                              p, q, r, s, t, u, v, w, x, y,
-                                              z, a1, b1, c1, d1, e1, f1, g1, h1, i1, j1, k1)
-        print('#################################################')
-        print(conf)
-        print('#################################################')
-        return 'test2'
+                            p,q,r,s,t,u,v,y,
+                            z,a1,b1,c1,d1,e1,f1,g1):
+    conf = api_arrange.monitoring_manager(tool,b,c,d,e,f,g,h,i,
+                            k,l,m,n,o,
+                            p,q,r,s,t,u,v,y,
+                            z,a1,b1,c1,d1,e1,f1,g1)
+    return MonitoringCaseManager(conf)
+
 
 
 def start_test(case,tool,hosts,auth1,auth2,f_data1,f_data2,f_data3,f_data4,f_data5,f_data6):

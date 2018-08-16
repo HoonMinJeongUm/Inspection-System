@@ -10,15 +10,15 @@ api=Api(app)
 def api_bottleneck(ip1,ip2,mod1,mod2,test):
     return api_handler.start_bottleneck('Bottleneck',ip1,ip2,mod1,mod2,test)
 
-@app.route('/api_gate/Monitoring/<header>/<type>/<a>/<b>/<c>/<d>/<e>/<f>/<g>/<h>/<i>/<k>/<l>/<m>/<n>/<o>/<p>/<q>/<r>/<s>/<t>/<u>/<v>/<w>/<x>/<y>/<z>/<a1>/<b1>/<c1>/<d1>/<e1>/<f1>/<g1>/<h1>/<i1>/<j1>/<k1>',methods=['POST','PUT'])
-def api_monitoring_initiate(header,type,a,b,c,d,e,f,g,h,i,
+@app.route('/api_gate/Monitoring/<tool>/<b>/<c>/<d>/<e>/<f>/<g>/<h>/<i>/<k>/<l>/<m>/<n>/<o>/<p>/<q>/<r>/<s>/<t>/<u>/<v>/<w>/<z>/<a1>/<b1>/<c1>/<d1>/<e1>/<f1>/<g1>',methods=['POST','PUT'])
+def api_monitoring_initiate(tool,b,c,d,e,f,g,h,i,
                             k,l,m,n,o,
-                            p,q,r,s,t,u,v,w,x,y,
-                            z,a1,b1,c1,d1,e1,f1,g1,h1,i1,j1,k1):
-    return api_handler.start_monitoring_service(header,type,a,b,c,d,e,f,g,h,i,
+                            p,q,r,s,t,u,v,w,
+                            z,a1,b1,c1,d1,e1,f1,g1):
+    return api_handler.start_monitoring_service(tool,b,c,d,e,f,g,h,i,
                             k,l,m,n,o,
-                            p,q,r,s,t,u,v,w,x,y,
-                            z,a1,b1,c1,d1,e1,f1,g1,h1,i1,j1,k1)
+                            p,q,r,s,t,u,v,w,
+                            z,a1,b1,c1,d1,e1,f1,g1)
 
 @app.route('/api_gate/Test/<case>/<tool>/<hosts>/<auth1>/<auth2>/<f_data1>/<f_data2>/<f_data3>/<f_data4>/<f_data5>/<f_data6>',methods=['POST','PUT'])
 def apI_test(case,tool,hosts,auth1,auth2,f_data1,f_data2,f_data3,f_data4,f_data5,f_data6):
