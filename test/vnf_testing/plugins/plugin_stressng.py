@@ -73,5 +73,6 @@ def start(hosts=None, auth=None, vnf_testing_args_dict={}):
 
     # cmd = 'stress-ng --cpu 4 --vm 3 --vm-bytes 2048m --hdd 2 --hdd-bytes 1024m --timeout 10s --metrics-brief'
     stressng_result = listener.start_command(hosts=[hosts], auth=auth, command=cmd)
+    print(stressng_result)
 
     return stressng_result

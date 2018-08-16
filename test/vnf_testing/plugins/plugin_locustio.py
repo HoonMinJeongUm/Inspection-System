@@ -50,4 +50,6 @@ def start(hosts=None, auth=None, vnf_testing_args_dict=None):
     # TODO(Jaewook) : How to open new tab for locustio gui page?
     locustio_result = "http://{0}:5559".format(hosts)
 
+    print(locustio_result)
+
     return locustio_result
