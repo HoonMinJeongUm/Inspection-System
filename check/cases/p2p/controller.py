@@ -2,7 +2,7 @@ from check.cases.base_controller import BaseController
 from ssh_manager import listener
 from check.cases.p2p import parser
 
-class Client(BaseController):
+class Client():
 # ping -c 3 -q LOCAL IP(
 
     def __init__(self):
@@ -15,9 +15,18 @@ class Client(BaseController):
         # # ping -c 3 -q LOCAL IP(
         # we need to get DEST IP (Not HOSTs IP)
         print("Start Execute")
-        hosts = data[0]
-        auth = data[1]
-        command = data[2]
+        
+
+        hosts = []
+        if ',' in data['Hosts'] :
+            hosts = data['Hosts'].split(',')
+        else: 
+            hosts.insert( data['Hosts'])
+        auth = [data['SSH_ID'],data['SSH_PWD']]
+        command = 'ping -c 3 -q localhost'
+        print(hosts)
+        print(auth)
+        print(command)
         result = listener.start_command(hosts,auth,command)
         parsing_data = self.pars.parsing(hosts,command,result)
 

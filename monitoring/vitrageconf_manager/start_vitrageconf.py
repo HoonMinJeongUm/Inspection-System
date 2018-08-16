@@ -45,15 +45,17 @@ class VitrageconfManager(object):
 
         open("%s/install_agent.sh" % self.path_script, 'w').close()  # make <install_agent> script
 
+        subprocess.call("echo 'sudo echo \"ubuntu:ubuntu\" | chpasswd' >> '%s'" % self.script, shell=True)
+        subprocess.call("echo 'sudo echo \"root:root\" | chpasswd' >> '%s'" % self.script, shell=True)
         subprocess.call("echo 'sudo apt-get -y update' >> '%s'" % self.script, shell=True)
         subprocess.call("echo 'sudo apt-get -y upgrade' >> '%s'" % self.script, shell=True)
         subprocess.call("echo 'sudo apt-get -y install zabbix-agent' >> '%s'" % self.script, shell=True)
         subprocess.call("echo 'sudo apt-get -y install apache2' >> '%s'" % self.script, shell=True)
         subprocess.call("echo '\n' >> '%s'" % self.script, shell=True)
 
-        subprocess.call("echo 'sudo sed -i \"2s/.*/`ifconfig '%s' | grep \"inet addr:\"| cut -d: -f2 | awk \"{ print $1 }\"`/g\" \"/opt/stack/Inspection-System/testhosts\"' >> '%s'" % (self.vm_interface, self.script), shell=True)           #replace testhosts to /etc/hosts
-        subprocess.call("echo 'sudo sed -i \"s/Bcast/`cat /etc/hostname`/g\" \"/opt/stack/Inspection-System/testhosts\"' >> '%s'" % self.script, shell=True)                                 #replace testhosts to /etc/hosts
-        subprocess.call("echo 'sudo sed -i \"3s/.*/'%s'\\\tmonitor/g\" \"/opt/stack/Inspection-System/testhosts\"' >> '%s'" % (self.vm_ip, self.script), shell=True)                        #replace testhosts to /etc/hosts
+        subprocess.call("echo 'sudo sed -i \"2s/.*/`ifconfig '%s' | grep \"inet addr:\"| cut -d: -f2 | awk \"{ print $1 }\"`/g\" \"/etc/hosts\"' >> '%s'" % (self.vm_interface, self.script), shell=True)           #replace testhosts to /etc/hosts
+        subprocess.call("echo 'sudo sed -i \"s/Bcast/`cat /etc/hostname`/g\" \"/etc/hosts\"' >> '%s'" % self.script, shell=True)                                 #replace testhosts to /etc/hosts
+        subprocess.call("echo 'sudo sed -i \"3s/.*/'%s'\\\tmonitor/g\" \"/etc/hosts\"' >> '%s'" % (self.vm_ip, self.script), shell=True)                        #replace testhosts to /etc/hosts
         subprocess.call("echo 'sudo /etc/init.d/networking restart' >> '%s'" % self.script, shell=True)
         subprocess.call("echo 'sudo echo \"zabbix ALL=NOPASSWD: ALL\" >> /etc/sudoers' >> '%s'" % self.script, shell=True)
         subprocess.call("echo '\n' >> '%s'" % self.script, shell=True)
@@ -66,8 +68,6 @@ class VitrageconfManager(object):
 
         subprocess.call("echo 'sudo service apache2 restart' >> '%s'" % self.script, shell=True)
         subprocess.call("echo 'sudo service zabbix-agent restart' >> '%s'" % self.script, shell=True)
-        subprocess.call("echo 'sudo echo \"ubuntu:ubuntu\" | chpasswd' >> '%s'" % self.script, shell=True)
-        subprocess.call("echo 'sudo echo \"root:root\" | chpasswd' >> '%s'" % self.script, shell=True)
 
         # os.chmod("%s/install_agent" %path,0777)     #make <install_agent> shell script execute
         #ssh_manager.listener.start_script(self.vm_ip,self. )  # hosts,auth,file_name,local_path,remote_path

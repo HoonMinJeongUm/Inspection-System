@@ -60,4 +60,5 @@ class MonitoringCaseManager(object):
 if __name__ == '__main__':
     with open("monitoring_data.yaml", 'r') as files:
         conf = yaml.load(files)
+    conf['header'] = 'Monitoring'
     MonitoringCaseManager(conf)

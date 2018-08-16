@@ -1,7 +1,7 @@
 import abc
 class BaseParser(abc.ABCMeta):
 
-    @abc.abstractmethod
+    @abc.aabstractmethod
     def parsing(self,hosts,command,result):
         pass
 

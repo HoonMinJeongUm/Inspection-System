@@ -66,7 +66,7 @@ def start(hosts=None, auth=None, vnf_testing_args_dict=None):
     # artillery_config.yml transfer needed
     # vnf_testing_args_dict has the path of artillery_config.yml
     artillery_raw_result = listener.start_command(hosts=[hosts], auth=auth, command=cmd)
-
+    '''	
     artillery_result = artillery_raw_result.replace("\x1b[2K\x1b[1G\x1b[36m⠋\x1b[39m", "")
     artillery_result = artillery_result.replace("[192.168.9.211]", "")
     artillery_result = artillery_result.replace("out:", "")
@@ -78,6 +78,6 @@ def start(hosts=None, auth=None, vnf_testing_args_dict=None):
     artillery_result = artillery_result.replace("\x1b[?25l", "")
     artillery_result = artillery_result.replace("\x1b[?25h", "")
     artillery_result = artillery_result.replace("⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏  ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇", "")
-
-    print(artillery_result)
-    return artillery_result
+    '''
+    print(artillery_raw_result)
+    return artillery_raw_result

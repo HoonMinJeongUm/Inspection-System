@@ -1,6 +1,6 @@
 from check.cases.base_parser import BaseParser
 
-class BottleneckParser(BaseParser):
+class BottleneckParser():
     def __init__(self):
         pass
 

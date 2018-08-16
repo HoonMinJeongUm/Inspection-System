@@ -51,14 +51,14 @@ def start(hosts=None, auth=None, vnf_testing_args_dict={}):
     if "vm" in vnf_testing_args_dict:
         stressng_args_dict["vm"] = str(vnf_testing_args_dict['vm'])
 
-    if "vm_bytes" in vnf_testing_args_dict:
-        stressng_args_dict["vm-bytes"] = str(vnf_testing_args_dict['vm_bytes'])
+    if "vm-bytes" in vnf_testing_args_dict:
+        stressng_args_dict["vm-bytes"] = str(vnf_testing_args_dict['vm-bytes'])
 
     if "hdd" in vnf_testing_args_dict:
         stressng_args_dict["hdd"] = str(vnf_testing_args_dict['hdd'])
 
-    if "hdd_bytes" in vnf_testing_args_dict:
-        stressng_args_dict["hdd-bytes"] = str(vnf_testing_args_dict['hdd_bytes'])
+    if "hdd-bytes" in vnf_testing_args_dict:
+        stressng_args_dict["hdd-bytes"] = str(vnf_testing_args_dict['hdd-bytes'])
 
     if "timeout" in vnf_testing_args_dict:
         stressng_args_dict["timeout"] = str(vnf_testing_args_dict['timeout'])

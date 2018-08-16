@@ -5,20 +5,20 @@ vitrage_conf_policy:
   server_port: 80
   server_pass: "zabbix"
   server_user: "Admin"
-  vm_ip: "192.168.11.215"
-  vm_id: "sdfdsfsfsfdsfs"
-  host_name: "test_monitoring"
-  host_type: "nova.host"
+  vm_ip: "192.168.11.218"
+  vm_id: "853df695-aca1-4a2d-ba36-f22ce1a4c797"
+  host_name: "VM1"
+  host_type: "nova.instance"
   vm_interface: "eth0"
 
 app_monitoring_policy:
   name: zabbix
-  host_name: "VM1"
+  host_name: "VM2"
   zabbix_username: "Admin"
   zabbix_password: "zabbix"
   zabbix_server_ip: "192.168.11.61"
   zabbix_server_port: 80
-  mgmt_ip : "192.168.11.215"
+  mgmt_ip : "192.168.11.218"
   parameters:
     application:
       app_name: "apache2"

@@ -1,40 +1,29 @@
 import api_arrange
 import os
 import sys
-from check.case_manager import call_case
+#import pickle
+
+from check import case_manager
 from test.case_manager import CaseManager
 from monitoring.case_manager import MonitoringCaseManager
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-#from check.cases.base_controller import BaseController
 
-# data = [['192.168.11.3', '192.168.11.31'],['root', 'root'],'netstat -nap | grep ESTAB | wc -l']
-# call_case('Bottleneck',data)
+def start_action(action,data):
+	encoded_data = {k.encode(): v.encode() for k,v in data.iteritems()}
+    	if action == 'Test':
+        	print("########################### ", action)
+		dummy_case = 'vnf'
+		dummy_tool = 'artillery'
+		vnf_testing_args_dict = None
+		requestdict = None
+		vnf_testing_args_dict = encoded_data
 
-def start_bottleneck(msg,ip1,ip2,mod1,mod2,test):
-    sortdata = api_arrange.bottleneck(ip1,ip2,mod1,mod2,test)
-    return call_case(msg,sortdata)
+		result = CaseManager.start(dummy_case, dummy_tool, encoded_data['host'], encoded_data['auth'], vnf_testing_args_dict, requestdict)
+	#result = CaseManager.start('vnf', 'locustio', data['host'].encode('ascii'), data['auth'].encode('ascii'), data)
+		print(result)
 
-def start_monitoring_service(tool,b,c,d,e,f,g,h,i,
-                            k,l,m,n,o,
-                            p,q,r,s,t,u,v,y,
-                            z,a1,b1,c1,d1,e1,f1,g1):
-    conf = api_arrange.monitoring_manager(tool,b,c,d,e,f,g,h,i,
-                            k,l,m,n,o,
-                            p,q,r,s,t,u,v,y,
-                            z,a1,b1,c1,d1,e1,f1,g1)
-    return MonitoringCaseManager(conf)
-
-
-
-def start_test(case,tool,hosts,auth1,auth2,f_data1,f_data2,f_data3,f_data4,f_data5,f_data6):
-    if case =='vnf':
-        auth = api_arrange.test_auth(auth1,auth2)
-        data_dic = api_arrange.test_vnf_dict(tool,f_data1,f_data2,f_data3,f_data4,f_data5,f_data6)
-        print('#################################################')
-        print(auth,data_dic)
-        print('#################################################')
-        return CaseManager.start(case=case,tool=tool,hosts=str(hosts),auth=auth,vnf_testing_args_dict=data_dic)
-    elif case =='vim':
-        requestdic = '{"NovaFlavors.create_flavor":[{"runner":{"type":"constant","concurrency":2,"times":10},"args":{"ram":500,"vcpus":1,"disk":1},"sla":{"failure_rate":{"max":0}}}]}'
-        return CaseManager.start(case=case,tool=tool,requestdict=str(requestdic))
+    	elif action == 'Check':
+        	case_manager.call_case(encoded_data['case'],encoded_data)
+    	elif action == 'Monitoring':
+        	pass   
