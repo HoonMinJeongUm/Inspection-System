@@ -1,24 +1,24 @@
 Header: "Monitoring"
 vitrage_conf_policy:
   monitoring_tool: "Zabbix"
-  server_ip: "192.168.11.61"
+  server_ip: "192.168.11.236"
   server_port: 80
   server_pass: "zabbix"
   server_user: "Admin"
-  vm_ip: "192.168.11.218"
-  vm_id: "853df695-aca1-4a2d-ba36-f22ce1a4c797"
-  host_name: "VM1"
+  vm_ip: "192.168.11.216"
+  vm_id: "441c2ea8-497c-4e56-9616-f06aa2638c63"
+  host_name: "Agent"
   host_type: "nova.instance"
   vm_interface: "eth0"
 
 app_monitoring_policy:
   name: zabbix
-  host_name: "VM2"
+  host_name: "Agent"
   zabbix_username: "Admin"
   zabbix_password: "zabbix"
-  zabbix_server_ip: "192.168.11.61"
+  zabbix_server_ip: "192.168.11.236"
   zabbix_server_port: 80
-  mgmt_ip : "192.168.11.218"
+  mgmt_ip : "192.168.11.216"
   parameters:
     application:
       app_name: "apache2"

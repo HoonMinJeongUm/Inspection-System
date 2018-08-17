@@ -2,6 +2,8 @@
 import subprocess
 from ssh_manager import listener
 import os
+import time
+
 
 class VitrageconfManager(object):
 
@@ -16,6 +18,7 @@ class VitrageconfManager(object):
         self.vm_ip =  None
         self.vm_id = None
         self.vm_interface= None
+	
 
         self.script = "/opt/stack/Inspection-System/install_agent.sh"                 # use for appending texts to script (real path in which script is locate )
         self.path_script = "/opt/stack/Inspection-System"                            # path of script
@@ -74,15 +77,21 @@ class VitrageconfManager(object):
 
     def start_config(self):
         # add zabbix to list of datasources in /etc/vitrage/vitrage.conf
-        subprocess.call(['sed', "-i", "20s/nova.host/zabbix,nova.host/g", self.vitrage_conf])
+        #subprocess.call(['sed', "-i", "20s/nova.host/zabbix,nova.host/g", self.vitrage_conf])
+	subprocess.call(['sed', "-i", "20s/types = nova.host/types = zabbix,nova.host/g", self.vitrage_conf])
+        
 
-        # add texts to vitrage_conf file
-        subprocess.call("echo '[zabbix]' >> '%s'" % self.vitrage_conf, shell=True)
-        subprocess.call("echo 'url = http://'%s'/zabbix' >> '%s'" % (self.server_ip, self.vitrage_conf), shell=True)
-        subprocess.call("echo 'password = '%s'' >> '%s'" % (self.server_pass, self.vitrage_conf), shell=True)
-        subprocess.call("echo 'user = '%s'' >> '%s'" % (self.server_user, self.vitrage_conf), shell=True)
-        subprocess.call("echo 'config_file = /etc/vitrage/zabbix_conf.yaml' >> '%s'" % self.vitrage_conf, shell=True)
-
+	# add texts to vitrage_conf file
+        #subprocess.call("echo '[zabbix]' >> '%s'" % self.vitrage_conf, shell=True)
+        #subprocess.call("echo 'url = http://'%s'/zabbix' >> '%s'" % (self.server_ip, self.vitrage_conf), shell=True)
+        #subprocess.call("echo 'password = '%s'' >> '%s'" % (self.server_pass, self.vitrage_conf), shell=True)
+        #subprocess.call("echo 'user = '%s'' >> '%s'" % (self.server_user, self.vitrage_conf), shell=True)
+        #subprocess.call("echo 'config_file = /etc/vitrage/zabbix_conf.yaml' >> '%s'" % self.vitrage_conf, shell=True)
+	subprocess.call(['sed', "-i", "35s/.*/[zabbix]/g", self.vitrage_conf])
+	subprocess.call(['sed', "-i", "36s/.*/url = http:\/\/%s\/zabbix/g" %self.server_ip, self.vitrage_conf])
+	subprocess.call(['sed', "-i", "37s/.*/password = %s/g" % self.server_pass, self.vitrage_conf])
+	subprocess.call(['sed', "-i", "38s/.*/user = %s/g" % self.server_user, self.vitrage_conf])
+	subprocess.call(['sed', "-i", "39s/.*/config_file = \/etc\/vitrage\/zabbix_conf.yaml/g" , self.vitrage_conf])
         # make zabbix_conf.yaml file and add texts
 
         if os.path.exists("%s" % self.zabbix_conf):
@@ -95,8 +104,11 @@ class VitrageconfManager(object):
         subprocess.call("echo '  type: '%s'' >> '%s'" % (self.host_type, self.zabbix_conf), shell=True)
         subprocess.call("echo '  name: '%s'' >> '%s'" % (self.vm_id, self.zabbix_conf), shell=True)
 
-        subprocess.call('sudo systemctl restart devstack@vitrage-graph.service', shell=True)
-        subprocess.call('sudo systemctl restart devstack@vitrage-collector.service', shell=True)
+	print("=================================================================")
+	print("            Waiting For Restart Vitrage-Service                  ")
+	print("=================================================================")
+	time.sleep(60)	
+        subprocess.call('sudo systemctl restart devstack@vitrage-*', shell=True)
 
     def start_script(self):
         self.decode()

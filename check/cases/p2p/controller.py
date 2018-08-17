@@ -21,7 +21,7 @@ class Client():
         if ',' in data['Hosts'] :
             hosts = data['Hosts'].split(',')
         else: 
-            hosts.insert( data['Hosts'])
+            hosts.append(data['Hosts'])
         auth = [data['SSH_ID'],data['SSH_PWD']]
         command = 'ping -c 3 -q localhost'
         print(hosts)
