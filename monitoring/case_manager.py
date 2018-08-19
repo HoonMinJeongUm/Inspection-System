@@ -17,7 +17,7 @@ class MonitoringCaseManager(object):
         self.MonitorLog.addHandler(handler)
 
         try:
-            if request['header'] is not "Monitoring":
+            if request['Header'] is not 'Monitoring':
                 raise KeyError
         except KeyError:
             self.MonitorLog.error("Header is wrong. Please check again.")
@@ -60,5 +60,5 @@ class MonitoringCaseManager(object):
 if __name__ == '__main__':
     with open("monitoring_data.yaml", 'r') as files:
         conf = yaml.load(files)
-    conf['header'] = 'Monitoring'
+    conf['Header'] = 'Monitoring'
     MonitoringCaseManager(conf)

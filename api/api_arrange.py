@@ -14,60 +14,84 @@ def bottleneck(ip1,ip2,mod1,mod2,test):
     c = [a,b,_test]
     return c
 
-# def monitoring(tool, ip, port, pas, user, name, type, vm_ip, vm_id):
-#     dic_a = {'header': 'Monitoring',
-#              'type': 'vitrageconf',
-#              'moitoring tool':  str(tool),
-#              'servier_ip': str(ip),
-#              'server_port': str(port),
-#              'sever_pass': str(pas),
-#              'server_user': str(user),
-#              'host_name ': str(name),
-#              'host_type': str(type),
-#              'vm_ip': str(vm_ip),
-#              'vm_id': str(vm_id)}
-#     return dic_a
 
-def monitoring_manager(tool,ip,port,pwd,user,vm_ip,vm_id,host_name,host_type,vm_interface,app_name,app_port,ssh_username,ssh_password,as_c_c,as_c_u,am_c_c,am_c_v,am_c_u,oai_c_c,oai_c_u,opv_c_c,opv_c_v,opv_c_u,ocl_c_c,ocl_c_v,ocl_c_u,ocu_c_c,ocu_c_v,ocu_c_u):
+def monitoring_manager(encoded_data):
     with open("monitoring_data.yaml", 'r') as files:
         conf = yaml.load(files)
-    conf['header'] = 'Monitoring'
-    conf['vitrage_conf_policy']['monitoring_tool'] = str(tool)
-    conf['vitrage_conf_policy']['server_ip'] = str(ip)
-    conf['vitrage_conf_policy']['server_port'] = int(port)
-    conf['vitrage_conf_policy']['server_pass'] = str(pwd)
-    conf['vitrage_conf_policy']['server_user'] = str(user)
-    conf['vitrage_conf_policy']['vm_ip'] = str(vm_ip)
-    conf['vitrage_conf_policy']['vm_id'] = str(vm_id)
-    conf['vitrage_conf_policy']['host_name'] = str(host_name)
-    conf['vitrage_conf_policy']['host_type'] = str(host_type)
-    vm_interface=str(vm_interface)
-    vm_interface=vm_interface.replace("*", "/")
-    conf['vitrage_conf_policy']['vm_interface'] = vm_interface
-
+    conf['Header'] = 'Monitoring'
+    # parse start_vitrage
+    conf['vitrage_conf_policy']['monitoring_tool'] = 'Zabbix'
+    conf['vitrage_conf_policy']['server_ip'] = encoded_data['Zabbix_Server_IP']
+    conf['vitrage_conf_policy']['server_port'] = encoded_data['Zabbix_Server_Port']
+    conf['vitrage_conf_policy']['server_pass'] = encoded_data['Zabbix_Server_Password']
+    conf['vitrage_conf_policy']['server_user'] = encoded_data['Zabbix_Server_User']
+    conf['vitrage_conf_policy']['vm_ip'] = encoded_data['VM_IP']
+    conf['vitrage_conf_policy']['vm_id'] = encoded_data['VM_ID']
+    conf['vitrage_conf_policy']['host_name'] = encoded_data['Zabbix_Host_Name']
+    conf['vitrage_conf_policy']['host_type'] = encoded_data['Zabbix_Host_Type']
+    conf['vitrage_conf_policy']['host_type'] = encoded_data['VM_Interface_Name']
+    #parse monitoring manager
     conf['app_monitoring_policy']['name'] = 'zabbix'
-    conf['app_monitoring_policy']['host_name'] = str(host_name)
-    conf['app_monitoring_policy']['zabbix_username'] = str(host_name)
-    conf['app_monitoring_policy']['zabbix_password'] = str(pwd)
-    conf['app_monitoring_policy']['zabbix_server_ip'] = str(ip)
-    conf['app_monitoring_policy']['zabbix_server_port'] = int(port)
-    conf['app_monitoring_policy']['mgmt_ip'] = str(vm_ip)
-    conf['app_monitoring_policy']['parameters']['application']['app_name'] = str(app_name)
-    conf['app_monitoring_policy']['parameters']['application']['app_port'] = int(app_port)
-    conf['app_monitoring_policy']['parameters']['application']['ssh_username'] = str(ssh_username)
-    conf['app_monitoring_policy']['parameters']['application']['ssh_password'] = str(ssh_password)
-    conf['app_monitoring_policy']['parameters']['application']['app_status']['condition'] = [str(as_c_c)]
-    conf['app_monitoring_policy']['parameters']['application']['app_status']['usage'] = [str(as_c_u)]
-    conf['app_monitoring_policy']['parameters']['application']['app_memory']['condition'] = [str(am_c_c),int(am_c_v)]
-    conf['app_monitoring_policy']['parameters']['application']['app_memory']['usage'] = [str(am_c_u)]
-    conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']['condition'] = [str(oai_c_c)]
-    conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']['usage'] = [str(oai_c_u)]
-    conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']['condition'] = [str(opv_c_c),int(opv_c_v)]
-    conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']['usage'] = [str(opv_c_u)]
-    conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']['condition'] = [str(ocl_c_c),int(ocl_c_v)]
-    conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']['usage'] = [str(ocl_c_u)]
-    conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['condition'] = [str(ocu_c_c),int(ocu_c_v)]
-    conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']['usage'] = [str(ocu_c_u)]
+    conf['app_monitoring_policy']['host_name'] = encoded_data['Zabbix_Host_Name']
+    conf['app_monitoring_policy']['zabbix_username'] = encoded_data['Zabbix_Server_User']
+    conf['app_monitoring_policy']['zabbix_password'] = encoded_data['Zabbix_Server_Password']
+    conf['app_monitoring_policy']['zabbix_server_ip'] = encoded_data['Zabbix_Server_IP']
+    conf['app_monitoring_policy']['zabbix_server_port'] = encoded_data['Zabbix_Server_Port']
+    conf['app_monitoring_policy']['mgmt_ip'] = encoded_data['VM_IP']
+
+    conf['app_monitoring_policy']['parameters']['application']['app_name'] = encoded_data['App_name']
+    conf['app_monitoring_policy']['parameters']['application']['app_port'] = encoded_data['App_port']
+    conf['app_monitoring_policy']['parameters']['application']['ssh_username'] = encoded_data['Ssh_username']
+    conf['app_monitoring_policy']['parameters']['application']['ssh_password'] = encoded_data['Ssh_password']
+
+    if encoded_data['app_status'] is 'true':
+        data = list()
+        data.append(encoded_data['status_condition'])
+        conf['app_monitoring_policy']['parameters']['application']['app_status']['condition'] = data
+    conf['app_monitoring_policy']['parameters']['application']['app_status']['usage'] = encoded_data['app_status']
+
+    if encoded_data['app_memory'] is 'true':
+        mem = encoded_data['memory_condition'].split(", ")
+        value = int(mem[1])
+        data = list()
+        data.append(mem[0])
+        data.append(value)
+        conf['app_monitoring_policy']['parameters']['application']['app_memory']['condition'] = data
+    conf['app_monitoring_policy']['parameters']['application']['app_memory']['usage'] = encoded_data['app_memory']
+
+    if encoded_data['agent_info'] is 'true':
+        data = list()
+        data.append(encoded_data['agentinfo_condition'])
+        conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']['condition'] = data
+    conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']['usage'] = encoded_data['agent_info']
+
+    if encoded_data['proc_value'] is 'true':
+        proc = encoded_data['procvalue_condition'].split(", ")
+        value = int(proc[1])
+        data = list()
+        data.append(proc[0])
+        data.append(value)    
+        conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']['condition'] = data
+    conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']['usage'] = encoded_data['proc_value']
+
+    if encoded_data['cpu_load'] is 'true':
+        load = encoded_data['cpuload_condition'].split(", ")
+        value = int(load[1])
+        data = []
+        data.append(load[0])
+        data.append(value)
+        conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']['condition'] = data
+    conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']['usage'] = encoded_data['cpu_load']
+
+    if encoded_data['cpu_usage'] == 'true':
+        usage = encoded_data['cpuload_condition'].split(", ")
+        value = int(usage[1])
+        data = []
+        data.append(usage[0])
+        data.append(value)
+        conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['condition'] = data
+    conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['usage'] = encoded_data['cpu_usage']
+
     return conf
 
 def test_auth(auth1,auth2):

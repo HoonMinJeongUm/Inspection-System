@@ -57,7 +57,7 @@ class MonitoringManager(VNFMonitorZabbix):
         self.parse_status()
         # waiting for testing result
         self.listen_testing()
-        self.data_check()
+        # self.data_check()
         # name_parse
         self.name = self.my_conf['app_monitoring_policy']['host_name']
         del self.my_conf['app_monitoring_policy']['host_name']
@@ -141,14 +141,37 @@ class MonitoringManager(VNFMonitorZabbix):
         else:
             del self.my_conf['app_monitoring_policy']['parameters']['application']['app_memory']
         # parse the os information
-        for topic in self.my_conf['app_monitoring_policy']['parameters']['OS']:
-            if self.my_conf['app_monitoring_policy']['parameters']['OS'][topic]['usage'] == 'true':
-                self.my_conf['app_monitoring_policy']['parameters']['OS'][topic]['actionname'] = 'cmd'
-                self.my_conf['app_monitoring_policy']['parameters']['OS'][topic]['cmd-action'] \
-                    = 'None'
-                del self.my_conf['app_monitoring_policy']['parameters']['OS'][topic]['usage']
-            else:
-                del self.my_conf['app_monitoring_policy']['parameters']['OS'][topic]
+        if self.my_conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']['usage'] == 'true':
+            self.my_conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']['actionname'] = 'cmd'
+            self.my_conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']['cmd-action'] \
+                = 'None'
+            del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']['usage']
+        else:
+            del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']
+
+        if self.my_conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']['usage'] == 'true':
+            self.my_conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']['actionname'] = 'cmd'
+            self.my_conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']['cmd-action'] \
+                = 'None'
+            del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']['usage']
+        else:
+            del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']
+
+        if self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']['usage'] == 'true':
+            self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']['actionname'] = 'cmd'
+            self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']['cmd-action'] \
+                = 'None'
+            del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']['usage']
+        else:
+            del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']
+
+        if self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['usage'] == 'true':
+            self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['actionname'] = 'cmd'
+            self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['cmd-action'] \
+                = 'None'
+            del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['usage']
+        else:
+            del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']
 
     @staticmethod
     def complete():
@@ -237,7 +260,7 @@ class MonitoringManager(VNFMonitorZabbix):
 
 
 if __name__ == '__main__':
-    with open("monitoring_manager.yaml", 'r') as files:
+    with open("../monitoring_data.yaml", 'r') as files:
         conf = yaml.load(files)
 
     MonitoringManager(conf)
