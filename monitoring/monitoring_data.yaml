@@ -13,12 +13,12 @@ vitrage_conf_policy:
 
 app_monitoring_policy:
   name: zabbix
-  host_name: "Agent"
+  host_name: ["Agent", "Agent2"]
   zabbix_username: "Admin"
   zabbix_password: "zabbix"
   zabbix_server_ip: "192.168.11.236"
   zabbix_server_port: 80
-  mgmt_ip : "192.168.11.216"
+  mgmt_ip : ["192.168.11.216", "192.168.11.236"]
   parameters:
     application:
       app_name: "apache2"

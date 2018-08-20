@@ -51,6 +51,7 @@ class MonitoringCaseManager(object):
         """
         MonitoringManager(self.request)
 
+
     def finish(self):
         print("===============================================================")
         print("               Monitoring Component Complete                   ")

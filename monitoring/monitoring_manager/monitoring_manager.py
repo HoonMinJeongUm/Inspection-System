@@ -22,20 +22,28 @@ class MonitoringManager(VNFMonitorZabbix):
         handler = logging.StreamHandler()
         handler.setFormatter(formatter)
         self.ManagerLog.addHandler(handler)
+
         self.my_conf = request
-        self.name = None
+        self.mgmt_IP = self.my_conf['app_monitoring_policy']['mgmt_ip']
+        self.host_name = self.my_conf['app_monitoring_policy']['host_name']
         self.name_of_template = "HoonMinJeongUm Template "
+
         self.start()
         self.complete()
 
     def start(self):
         """
         starts the main logic
-        :param vnf: I have to fix it later..
+        if it has many vm, register them all
         :return: none
         """
         self.read_data()
-        self.add_to_appmonitor()
+        for number in range(0, len(self.mgmt_IP)):
+            self.my_conf['app_monitoring_policy']['mgmt_ip'] = self.mgmt_IP[number]
+            self.kwargs = {'vdus': {self.host_name[number]: {}}}
+            self.kwargs['vdus'][self.host_name[number]] = self.my_conf['app_monitoring_policy']
+            print self.kwargs
+            self.add_to_appmonitor()
 
     def read_data(self):
         """
@@ -43,10 +51,6 @@ class MonitoringManager(VNFMonitorZabbix):
         to use monitoring [yaml] template
         :return: none
         """
-        # parsing test code in 3 lines
-        # with open("monitoring_manager/monitoring_manager.yaml", 'r') as files:
-        #     conf = yaml.load(files)
-        # self.my_conf = self.parse_conf(conf)
         try:
             if not self.my_conf['app_monitoring_policy']:
                 raise KeyError
@@ -56,66 +60,11 @@ class MonitoringManager(VNFMonitorZabbix):
 
         self.parse_status()
         # waiting for testing result
-        self.listen_testing()
+        # self.listen_testing()
         # self.data_check()
         # name_parse
-        self.name = self.my_conf['app_monitoring_policy']['host_name']
+        # self.name = self.my_conf['app_monitoring_policy']['host_name']
         del self.my_conf['app_monitoring_policy']['host_name']
-        # data input
-        self.kwargs = {'vdus': {self.name: {}}}
-        self.kwargs['vdus'][self.name] = self.my_conf['app_monitoring_policy']
-
-    def parse_conf(self, conf):
-        """
-        parse the .cfg file into my conf file
-        :param conf: default conf file
-        :return: completed conf file
-        """
-        config = ConfigParser.ConfigParser()
-        config.read("monitoring_manager/monitoring.cfg")
-        # check for information section is correct
-        try:
-            for text in config.sections():
-                if text != "INFO" and text != "APP_INFO" and text != "APP" and text != "OS":
-                    raise KeyError
-        except KeyError:
-            self.ManagerLog.error("Missing Information of Zabbix API")
-            sys.exit(1)
-
-        # parse the basic_information
-        for INFO in config.options('INFO'):
-            conf['app_monitoring_policy'][INFO] = config.get('INFO', INFO)
-        # parse the app_information
-        for APP_INFO in config.options('APP_INFO'):
-            conf['app_monitoring_policy']['parameters']['application'][APP_INFO] \
-                = config.get('APP_INFO', APP_INFO)
-        # parse the application information
-        for topic in config.options('APP'):
-            parse_app = config.get('APP', topic)
-            parse_app = ast.literal_eval(parse_app)
-            if parse_app['usage'] == "true":
-                conf['app_monitoring_policy']['parameters']['application'][topic]['actionname'] \
-                    = 'cmd'
-                conf['app_monitoring_policy']['parameters']['application'][topic]['cmd-action'] \
-                    = parse_app['cmd-action']
-                conf['app_monitoring_policy']['parameters']['application'][topic]['condition'] \
-                    = parse_app['condition']
-            else:
-                del conf['app_monitoring_policy']['parameters']['application'][topic]
-        # parse the os information
-        for topic in config.options('OS'):
-            parse_os = config.get('OS', topic)
-            parse_os = ast.literal_eval(parse_os)
-            if parse_os['usage'] == "true":
-                conf['app_monitoring_policy']['parameters']['OS'][topic]['actionname'] = 'cmd'
-                conf['app_monitoring_policy']['parameters']['OS'][topic]['cmd-action'] \
-                    = parse_os['cmd-action']
-                conf['app_monitoring_policy']['parameters']['OS'][topic]['condition'] \
-                    = parse_os['condition']
-            else:
-                del conf['app_monitoring_policy']['parameters']['OS'][topic]
-
-        return conf
 
     def parse_status(self):
         """
@@ -127,7 +76,7 @@ class MonitoringManager(VNFMonitorZabbix):
             self.my_conf['app_monitoring_policy']['parameters']['application']['app_status']['actionname'] \
                  = 'cmd'
             self.my_conf['app_monitoring_policy']['parameters']['application']['app_status']['cmd-action'] \
-                = 'None'
+                = 'sudo service bono restart'
             del self.my_conf['app_monitoring_policy']['parameters']['application']['app_status']['usage']
         else:
             del self.my_conf['app_monitoring_policy']['parameters']['application']['app_status']
@@ -136,7 +85,7 @@ class MonitoringManager(VNFMonitorZabbix):
             self.my_conf['app_monitoring_policy']['parameters']['application']['app_memory']['actionname'] \
                  = 'cmd'
             self.my_conf['app_monitoring_policy']['parameters']['application']['app_memory']['cmd-action'] \
-                = 'None'
+                = 'sudo service bono restart'
             del self.my_conf['app_monitoring_policy']['parameters']['application']['app_memory']['usage']
         else:
             del self.my_conf['app_monitoring_policy']['parameters']['application']['app_memory']
@@ -144,7 +93,7 @@ class MonitoringManager(VNFMonitorZabbix):
         if self.my_conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']['usage'] == 'true':
             self.my_conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']['actionname'] = 'cmd'
             self.my_conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']['cmd-action'] \
-                = 'None'
+                = 'sudo service bono restart'
             del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']['usage']
         else:
             del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']
@@ -152,7 +101,7 @@ class MonitoringManager(VNFMonitorZabbix):
         if self.my_conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']['usage'] == 'true':
             self.my_conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']['actionname'] = 'cmd'
             self.my_conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']['cmd-action'] \
-                = 'None'
+                = 'sudo service bono restart'
             del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']['usage']
         else:
             del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']
@@ -160,7 +109,7 @@ class MonitoringManager(VNFMonitorZabbix):
         if self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']['usage'] == 'true':
             self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']['actionname'] = 'cmd'
             self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']['cmd-action'] \
-                = 'None'
+                = 'sudo service bono restart'
             del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']['usage']
         else:
             del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']
@@ -168,7 +117,7 @@ class MonitoringManager(VNFMonitorZabbix):
         if self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['usage'] == 'true':
             self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['actionname'] = 'cmd'
             self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['cmd-action'] \
-                = 'None'
+                = 'sudo service bono restart'
             del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['usage']
         else:
             del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']

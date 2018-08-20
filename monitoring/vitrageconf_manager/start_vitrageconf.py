@@ -18,7 +18,6 @@ class VitrageconfManager(object):
         self.vm_ip =  None
         self.vm_id = None
         self.vm_interface= None
-	
 
         self.script = "/opt/stack/Inspection-System/install_agent.sh"                 # use for appending texts to script (real path in which script is locate )
         self.path_script = "/opt/stack/Inspection-System"                            # path of script
@@ -44,7 +43,7 @@ class VitrageconfManager(object):
         self.vm_id = self.data['vm_id']
         self.vm_interface = self.data['vm_interface']
 
-    def make_script(self):
+    def make_script(self, number):
 
         open("%s/install_agent.sh" % self.path_script, 'w').close()  # make <install_agent> script
 
@@ -58,7 +57,7 @@ class VitrageconfManager(object):
 
         subprocess.call("echo 'sudo sed -i \"2s/.*/`ifconfig '%s' | grep \"inet addr:\"| cut -d: -f2 | awk \"{ print $1 }\"`/g\" \"/etc/hosts\"' >> '%s'" % (self.vm_interface, self.script), shell=True)           #replace testhosts to /etc/hosts
         subprocess.call("echo 'sudo sed -i \"s/Bcast/`cat /etc/hostname`/g\" \"/etc/hosts\"' >> '%s'" % self.script, shell=True)                                 #replace testhosts to /etc/hosts
-        subprocess.call("echo 'sudo sed -i \"3s/.*/'%s'\\\tmonitor/g\" \"/etc/hosts\"' >> '%s'" % (self.vm_ip, self.script), shell=True)                        #replace testhosts to /etc/hosts
+        subprocess.call("echo 'sudo sed -i \"3s/.*/'%s'\\\tmonitor/g\" \"/etc/hosts\"' >> '%s'" % (self.vm_ip[number], self.script), shell=True)                        #replace testhosts to /etc/hosts
         subprocess.call("echo 'sudo /etc/init.d/networking restart' >> '%s'" % self.script, shell=True)
         subprocess.call("echo 'sudo echo \"zabbix ALL=NOPASSWD: ALL\" >> /etc/sudoers' >> '%s'" % self.script, shell=True)
         subprocess.call("echo '\n' >> '%s'" % self.script, shell=True)
@@ -100,9 +99,10 @@ class VitrageconfManager(object):
             open("%s/zabbix_conf.yaml" % self.path_vitrage, 'w').close()
             subprocess.call("echo 'zabbix:' >> '%s'" % self.zabbix_conf, shell=True)
 
-        subprocess.call("echo '- zabbix_host: '%s'' >> '%s'" % (self.host_name, self.zabbix_conf), shell=True)
-        subprocess.call("echo '  type: '%s'' >> '%s'" % (self.host_type, self.zabbix_conf), shell=True)
-        subprocess.call("echo '  name: '%s'' >> '%s'" % (self.vm_id, self.zabbix_conf), shell=True)
+        for number in range(0, len(self.host_name)):
+            subprocess.call("echo '- zabbix_host: '%s'' >> '%s'" % (self.host_name[number], self.zabbix_conf), shell=True)
+            subprocess.call("echo '  type: '%s'' >> '%s'" % (self.host_type, self.zabbix_conf), shell=True)
+            subprocess.call("echo '  name: '%s'' >> '%s'" % (self.vm_id[number], self.zabbix_conf), shell=True)
 
 	print("=================================================================")
 	print("            Waiting For Restart Vitrage-Service                  ")
@@ -113,7 +113,11 @@ class VitrageconfManager(object):
     def start_script(self):
         self.decode()
         if self.monitoring_tool == "Zabbix":
-            self.make_script()
-            listener.start_script([self.vm_ip], ['ubuntu','ubuntu'], "install_agent.sh", self.path_script, "/home/ubuntu")
+            print("=================================================================")
+            print("                      Making Script to VM                        ")
+            print("=================================================================")
+            for number in range(0, len(self.vm_ip)):
+                self.make_script(number)
+                listener.start_script([self.vm_ip[number]], ['ubuntu','ubuntu'], "install_agent.sh", self.path_script, "/home/ubuntu")
 
 

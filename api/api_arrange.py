@@ -25,79 +25,113 @@ def monitoring_manager(encoded_data):
     conf['vitrage_conf_policy']['server_port'] = encoded_data['Zabbix_Server_Port']
     conf['vitrage_conf_policy']['server_pass'] = encoded_data['Zabbix_Server_Password']
     conf['vitrage_conf_policy']['server_user'] = encoded_data['Zabbix_Server_User']
-    conf['vitrage_conf_policy']['vm_ip'] = encoded_data['VM_IP']
-    conf['vitrage_conf_policy']['vm_id'] = encoded_data['VM_ID']
-    conf['vitrage_conf_policy']['host_name'] = encoded_data['Zabbix_Host_Name']
+
+    data = list()
+    if ',' in encoded_data['VM_IP']:
+        data = encoded_data['VM_IP'].split(',')
+    else:
+        data.append(encoded_data['VM_IP'])
+    conf['vitrage_conf_policy']['vm_ip'] = data
+    conf['app_monitoring_policy']['mgmt_ip'] = data
+
+    data = list()
+    if ',' in encoded_data['VM_ID']:
+        data = encoded_data['VM_ID'].split(',')
+    else:
+        data.append(encoded_data['VM_ID'])
+    conf['vitrage_conf_policy']['vm_id'] = data
+
+    data = list()
+    if ',' in encoded_data['Zabbix_Host_Name']:
+        data = encoded_data['Zabbix_Host_Name'].split(',')
+    else:
+        data.append(encoded_data['Zabbix_Host_Name'])
+    conf['vitrage_conf_policy']['host_name'] = data
+    conf['app_monitoring_policy']['host_name'] = data
+
     conf['vitrage_conf_policy']['host_type'] = encoded_data['Zabbix_Host_Type']
     conf['vitrage_conf_policy']['host_type'] = encoded_data['VM_Interface_Name']
     #parse monitoring manager
     conf['app_monitoring_policy']['name'] = 'zabbix'
-    conf['app_monitoring_policy']['host_name'] = encoded_data['Zabbix_Host_Name']
     conf['app_monitoring_policy']['zabbix_username'] = encoded_data['Zabbix_Server_User']
     conf['app_monitoring_policy']['zabbix_password'] = encoded_data['Zabbix_Server_Password']
     conf['app_monitoring_policy']['zabbix_server_ip'] = encoded_data['Zabbix_Server_IP']
     conf['app_monitoring_policy']['zabbix_server_port'] = encoded_data['Zabbix_Server_Port']
-    conf['app_monitoring_policy']['mgmt_ip'] = encoded_data['VM_IP']
+
 
     conf['app_monitoring_policy']['parameters']['application']['app_name'] = encoded_data['App_name']
     conf['app_monitoring_policy']['parameters']['application']['app_port'] = encoded_data['App_port']
     conf['app_monitoring_policy']['parameters']['application']['ssh_username'] = encoded_data['Ssh_username']
     conf['app_monitoring_policy']['parameters']['application']['ssh_password'] = encoded_data['Ssh_password']
 
-    if encoded_data['app_status'] is 'true':
+    if encoded_data['app_status'] == 'true':
         data = list()
         data.append(encoded_data['status_condition'])
         conf['app_monitoring_policy']['parameters']['application']['app_status']['condition'] = data
+        # conf['app_monitoring_policy']['parameters']['application']['app_status']['cmd-action'] \
+        #     = encoded_data['status_cmd']
     conf['app_monitoring_policy']['parameters']['application']['app_status']['usage'] = encoded_data['app_status']
 
-    if encoded_data['app_memory'] is 'true':
+    if encoded_data['app_memory'] == 'true':
         mem = encoded_data['memory_condition'].split(", ")
         value = int(mem[1])
         data = list()
         data.append(mem[0])
         data.append(value)
         conf['app_monitoring_policy']['parameters']['application']['app_memory']['condition'] = data
+        # conf['app_monitoring_policy']['parameters']['application']['app_memory']['cmd-action'] \
+        #     = encoded_data['memory_cmd']
     conf['app_monitoring_policy']['parameters']['application']['app_memory']['usage'] = encoded_data['app_memory']
 
-    if encoded_data['agent_info'] is 'true':
+    if encoded_data['agent_info'] == 'true':
         data = list()
         data.append(encoded_data['agentinfo_condition'])
         conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']['condition'] = data
+        # conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']['cmd-action'] \
+        #     = encoded_data['agent_cmd']
     conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']['usage'] = encoded_data['agent_info']
 
-    if encoded_data['proc_value'] is 'true':
+    if encoded_data['proc_value'] == 'true':
         proc = encoded_data['procvalue_condition'].split(", ")
         value = int(proc[1])
         data = list()
         data.append(proc[0])
         data.append(value)    
         conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']['condition'] = data
+        # conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']['cmd-action'] \
+        #     = encoded_data['proc_cmd']
     conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']['usage'] = encoded_data['proc_value']
 
-    if encoded_data['cpu_load'] is 'true':
+    if encoded_data['cpu_load'] == 'true':
         load = encoded_data['cpuload_condition'].split(", ")
         value = int(load[1])
-        data = []
+        data = list()
         data.append(load[0])
         data.append(value)
         conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']['condition'] = data
+        # conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']['cmd-action'] \
+        #     = encoded_data['cpu_load_cmd']
     conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']['usage'] = encoded_data['cpu_load']
 
     if encoded_data['cpu_usage'] == 'true':
         usage = encoded_data['cpuload_condition'].split(", ")
         value = int(usage[1])
-        data = []
+        data = list()
         data.append(usage[0])
         data.append(value)
         conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['condition'] = data
+        # conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['cmd-action'] \
+        #     = encoded_data['cpu_usage_cmd']
     conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['usage'] = encoded_data['cpu_usage']
 
     return conf
+
 
 def test_auth(auth1,auth2):
     auth1_1 = str(auth1)
     auth2_2 = str(auth2)
     return [auth1_1, auth2_2]
+
 
 def test_vnf_dict(tool,f_data1,f_data2,f_data3,f_data4,f_data5,f_data6):
     test_data = str(tool)
