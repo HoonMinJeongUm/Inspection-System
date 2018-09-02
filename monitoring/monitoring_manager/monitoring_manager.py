@@ -22,7 +22,7 @@ class MonitoringManager(VNFMonitorZabbix):
         handler = logging.StreamHandler()
         handler.setFormatter(formatter)
         self.ManagerLog.addHandler(handler)
-
+    
         self.my_conf = request
         self.mgmt_IP = self.my_conf['app_monitoring_policy']['mgmt_ip']
         self.host_name = self.my_conf['app_monitoring_policy']['host_name']
@@ -42,8 +42,11 @@ class MonitoringManager(VNFMonitorZabbix):
             self.my_conf['app_monitoring_policy']['mgmt_ip'] = self.mgmt_IP[number]
             self.kwargs = {'vdus': {self.host_name[number]: {}}}
             self.kwargs['vdus'][self.host_name[number]] = self.my_conf['app_monitoring_policy']
-            print self.kwargs
             self.add_to_appmonitor()
+            print("=================================================================")
+            print("             Monitoring [%s] register complete                   " %(number+1))
+            print("=================================================================")
+            time.sleep(1)
 
     def read_data(self):
         """
@@ -206,6 +209,8 @@ class MonitoringManager(VNFMonitorZabbix):
     def add_to_appmonitor(self):
         self.set_vdu_info()
         self.add_host_to_zabbix()
+        self.hostinfo = dict()
+        self.vduname = list()
 
 
 if __name__ == '__main__':
