@@ -45,3 +45,6 @@ def start_script(hosts,auth,file_name,local_path,remote_path):
     print(type(result.decode(encoding="utf-8")))
     print("===================================================================")
     return result.decode(encoding="utf-8")
+
+
+#start_command(['192.168.11.11'],['root','root'],'ping 192.168.11.1')
