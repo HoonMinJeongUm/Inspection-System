@@ -23,10 +23,7 @@ class Client():
         else: 
             hosts.append(data['Hosts'])
         auth = [data['SSH_ID'],data['SSH_PWD']]
-        command = 'ping -c 3 -q localhost'
-        print(hosts)
-        print(auth)
-        print(command)
+        command = 'ping -c 3 -q ' + data['Dest_IP']
         result = listener.start_command(hosts,auth,command)
         parsing_data = self.pars.parsing(hosts,command,result)
 

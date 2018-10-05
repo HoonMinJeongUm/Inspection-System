@@ -26,21 +26,27 @@ app_monitoring_policy:
       ssh_username: [ssh username in VNF OS]
       ssh_password: [ssh password in VNF OS]
       app_status:
-        condition: [comparison,value]
         usage: [1.true / 2. false]
+        condition: [comparison,value]
+        cmd-action: [action name]
       app_memory:
-        condition: [comparison,value]
         usage: [1.true / 2. false]
+        condition: [comparison,value]
+        cmd-action: [action name]
     OS:
       os_agent_info:
-        condition: [comparison,value]
         usage: [1.true / 2. false]
+        condition: [comparison,value]
+        cmd-action: [action name]
       os_proc_value:
-        condition: [comparison,value]
         usage: [1.true / 2. false]
+        condition: [comparison,value]
+        cmd-action: [action name]
       os_cpu_load:
-        condition: [comparison,value]
         usage: [1.true / 2. false]
+        condition: [comparison,value]
+        cmd-action: [action name]
       os_cpu_usage:
-        condition: [comparison,value]
         usage: [1.true / 2. false]
+        condition: [comparison,value]
+        cmd-action: [action name]

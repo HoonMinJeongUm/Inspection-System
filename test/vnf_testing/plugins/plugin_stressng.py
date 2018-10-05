@@ -68,11 +68,18 @@ def start(hosts=None, auth=None, vnf_testing_args_dict={}):
             cmd = cmd + '--' + k + ' ' + str(v) + ' '
 
     cmd = cmd + '--metrics-brief'
-    print("plugin_stressng : cmd = " + cmd)
+    #print("plugin_stressng : cmd = " + cmd)
     LOG.debug("plugin_stressng : cmd = " + cmd)
 
     # cmd = 'stress-ng --cpu 4 --vm 3 --vm-bytes 2048m --hdd 2 --hdd-bytes 1024m --timeout 10s --metrics-brief'
     stressng_result = listener.start_command(hosts=[hosts], auth=auth, command=cmd)
+    
+    # process result
+    stressng_result = stressng_result.replace("out:", "")
+    stressng_result = stressng_result.replace("stress-ng:", "")
+    stressng_result = stressng_result.replace("info:", "")
+    stressng_result = stressng_result.replace("Done.", "")
+    #stressng_result.replace("e
     print(stressng_result)
 
     return stressng_result

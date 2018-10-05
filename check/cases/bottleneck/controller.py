@@ -23,14 +23,13 @@ class Client():
         print("Start Execute")
 
         hosts = []
-        #if ',' in data['Hosts'] :
-        #    hosts = data['Hosts'].split(',')
-        #else:
-        #    hosts.insert( data['Hosts'])
+        if ',' in data['Hosts'] :
+            hosts = data['Hosts'].split(',')
+        else:
+            hosts.append(data['Hosts'])
         auth = [data['SSH_ID'],data['SSH_PWD']]
         port = data['Port']
-        hosts = ['127.0.0.1']
-        command = 'netstat - nap | ' + port + ' |  grep ESTAB | wc -l'
+        command = 'netstat - nap | grep :' + port + ' |  grep ESTAB | wc -l'
         print(hosts)
         print(auth)
         print(command)

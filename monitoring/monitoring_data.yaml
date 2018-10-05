@@ -26,21 +26,27 @@ app_monitoring_policy:
       ssh_username: "ubuntu"
       ssh_password: "ubuntu"
       app_status:
+        usage: "true"
         condition: ["down"]
-        usage: "true"
+        cmd-action: "None"
       app_memory:
-        condition: ["less", 40]
         usage: "true"
+        condition: ["less", 40]
+        cmd-action: "None"
     OS:
       os_agent_info:
+        usage: "true"
         condition: ["down"]
-        usage: "true"
+        cmd-action: "None"
       os_proc_value:
-        condition: ["less", 40]
         usage: "true"
+        condition: ["less", 40]
+        cmd-action: "None"
       os_cpu_load:
-        condition: ["less", 40]
         usage: "true"
+        condition: ["less", 40]
+        cmd-action: "None"
       os_cpu_usage:
-        condition: ["less", 40]
         usage: "true"
+        condition: ["less", 40]
+        cmd-action: "None"
