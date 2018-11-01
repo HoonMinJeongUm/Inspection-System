@@ -105,10 +105,14 @@ class VitrageconfManager(object):
             subprocess.call("echo '  name: '%s'' >> '%s'" % (self.vm_id[number], self.zabbix_conf), shell=True)
 
 	print("=================================================================")
-	print("            Waiting For Restart Vitrage-Service                  ")
+	print("            Waiting For agent<->server connection                ")
 	print("=================================================================")
-	time.sleep(60)	
-        subprocess.call('sudo systemctl restart devstack@vitrage-*', shell=True)
+	time.sleep(40)
+    print("=================================================================")
+    print("            Starting For Restart Vitrage-Service                  ")
+    print("=================================================================")
+    subprocess.call('sudo systemctl restart devstack@vitrage-collector.service', shell=True)
+    subprocess.call('sudo systemctl restart devstack@vitrage-graph.service', shell=True)
 
     def start_script(self):
         self.decode()
@@ -118,6 +122,13 @@ class VitrageconfManager(object):
             print("=================================================================")
             for number in range(0, len(self.vm_ip)):
                 self.make_script(number)
-                listener.start_script([self.vm_ip[number]], ['ubuntu','ubuntu'], "install_agent.sh", self.path_script, "/home/ubuntu")
+                if self.host_type == 'nova.host':
+                    print("This VM is Host")
+                    listener.start_script([self.vm_ip[number]], ['root','root'], "install_agent.sh", self.path_script,
+                                          "/home/ubuntu")
+                else:
+                    print("This VM is instance")
+                    listener.start_script([self.vm_ip[number]], ['ubuntu','ubuntu'], "install_agent.sh", self.path_script,
+                                          "/home/ubuntu")
 
 

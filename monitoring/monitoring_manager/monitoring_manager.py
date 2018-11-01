@@ -42,6 +42,7 @@ class MonitoringManager(VNFMonitorZabbix):
             self.my_conf['app_monitoring_policy']['mgmt_ip'] = self.mgmt_IP[number]
             self.kwargs = {'vdus': {self.host_name[number]: {}}}
             self.kwargs['vdus'][self.host_name[number]] = self.my_conf['app_monitoring_policy']
+            print(self.kwargs)
             self.add_to_appmonitor()
             print("=================================================================")
             print("             Monitoring [%s] register complete                   " %(number+1))
@@ -79,7 +80,7 @@ class MonitoringManager(VNFMonitorZabbix):
             self.my_conf['app_monitoring_policy']['parameters']['application']['app_status']['actionname'] \
                  = 'cmd'
             self.my_conf['app_monitoring_policy']['parameters']['application']['app_status']['cmd-action'] \
-                = 'sudo service bono restart'
+                = 'None'
             del self.my_conf['app_monitoring_policy']['parameters']['application']['app_status']['usage']
         else:
             del self.my_conf['app_monitoring_policy']['parameters']['application']['app_status']
@@ -88,7 +89,7 @@ class MonitoringManager(VNFMonitorZabbix):
             self.my_conf['app_monitoring_policy']['parameters']['application']['app_memory']['actionname'] \
                  = 'cmd'
             self.my_conf['app_monitoring_policy']['parameters']['application']['app_memory']['cmd-action'] \
-                = 'sudo service bono restart'
+                = 'None'
             del self.my_conf['app_monitoring_policy']['parameters']['application']['app_memory']['usage']
         else:
             del self.my_conf['app_monitoring_policy']['parameters']['application']['app_memory']
@@ -96,7 +97,7 @@ class MonitoringManager(VNFMonitorZabbix):
         if self.my_conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']['usage'] == 'true':
             self.my_conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']['actionname'] = 'cmd'
             self.my_conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']['cmd-action'] \
-                = 'sudo service bono restart'
+                = 'None'
             del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']['usage']
         else:
             del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_agent_info']
@@ -104,7 +105,7 @@ class MonitoringManager(VNFMonitorZabbix):
         if self.my_conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']['usage'] == 'true':
             self.my_conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']['actionname'] = 'cmd'
             self.my_conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']['cmd-action'] \
-                = 'sudo service bono restart'
+                = 'None'
             del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']['usage']
         else:
             del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_proc_value']
@@ -112,7 +113,7 @@ class MonitoringManager(VNFMonitorZabbix):
         if self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']['usage'] == 'true':
             self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']['actionname'] = 'cmd'
             self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']['cmd-action'] \
-                = 'sudo service bono restart'
+                = 'None'
             del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']['usage']
         else:
             del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']
@@ -120,7 +121,7 @@ class MonitoringManager(VNFMonitorZabbix):
         if self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['usage'] == 'true':
             self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['actionname'] = 'cmd'
             self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['cmd-action'] \
-                = 'sudo service bono restart'
+                = 'None'
             del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']['usage']
         else:
             del self.my_conf['app_monitoring_policy']['parameters']['OS']['os_cpu_usage']
