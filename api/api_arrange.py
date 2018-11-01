@@ -27,18 +27,18 @@ def monitoring_manager(encoded_data):
     conf['vitrage_conf_policy']['server_user'] = encoded_data['Zabbix_Server_User']
 
     data = list()
-    if ',' in encoded_data['VM_IP']:
-        data = encoded_data['VM_IP'].split(',')
+    if ',' in encoded_data['Host_IP']:
+        data = encoded_data['Host_IP'].split(',')
     else:
-        data.append(encoded_data['VM_IP'])
+        data.append(encoded_data['Host_IP'])
     conf['vitrage_conf_policy']['vm_ip'] = data
     conf['app_monitoring_policy']['mgmt_ip'] = data
 
     data = list()
-    if ',' in encoded_data['VM_ID']:
-        data = encoded_data['VM_ID'].split(',')
+    if ',' in encoded_data['Host_ID']:
+        data = encoded_data['Host_ID'].split(',')
     else:
-        data.append(encoded_data['VM_ID'])
+        data.append(encoded_data['Host_ID'])
     conf['vitrage_conf_policy']['vm_id'] = data
 
     data = list()
@@ -50,7 +50,7 @@ def monitoring_manager(encoded_data):
     conf['app_monitoring_policy']['host_name'] = data
 
     conf['vitrage_conf_policy']['host_type'] = encoded_data['Zabbix_Host_Type']
-    conf['vitrage_conf_policy']['host_type'] = encoded_data['VM_Interface_Name']
+    conf['vitrage_conf_policy']['host_type'] = encoded_data['Host_Interface_Name']
     #parse monitoring manager
     conf['app_monitoring_policy']['name'] = 'zabbix'
     conf['app_monitoring_policy']['zabbix_username'] = encoded_data['Zabbix_Server_User']
@@ -114,7 +114,7 @@ def monitoring_manager(encoded_data):
     conf['app_monitoring_policy']['parameters']['OS']['os_cpu_load']['usage'] = encoded_data['cpu_load']
 
     if encoded_data['cpu_usage'] == 'true':
-        usage = encoded_data['cpuload_condition'].split(", ")
+        usage = encoded_data['cpuusage_condition'].split(", ")
         value = int(usage[1])
         data = list()
         data.append(usage[0])

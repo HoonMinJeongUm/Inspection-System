@@ -1,24 +1,24 @@
 Header: "Monitoring"
 vitrage_conf_policy:
   monitoring_tool: "Zabbix"
-  server_ip: "192.168.11.236"
+  server_ip: "192.168.11.9"
   server_port: 80
   server_pass: "zabbix"
   server_user: "Admin"
-  vm_ip: "192.168.11.216"
-  vm_id: "441c2ea8-497c-4e56-9616-f06aa2638c63"
-  host_name: "Agent"
-  host_type: "nova.instance"
+  vm_ip: ["192.168.11.11"]
+  vm_id: ["MECsite1"]
+  host_name: ["Agent"]
+  host_type: "nova.host"
   vm_interface: "eth0"
 
 app_monitoring_policy:
   name: zabbix
-  host_name: ["Agent", "Agent2"]
+  host_name: ["MECsite1"]
   zabbix_username: "Admin"
   zabbix_password: "zabbix"
-  zabbix_server_ip: "192.168.11.236"
+  zabbix_server_ip: "192.168.11.9"
   zabbix_server_port: 80
-  mgmt_ip : ["192.168.11.216", "192.168.11.236"]
+  mgmt_ip : ["192.168.11.11"]
   parameters:
     application:
       app_name: "apache2"
@@ -26,27 +26,27 @@ app_monitoring_policy:
       ssh_username: "ubuntu"
       ssh_password: "ubuntu"
       app_status:
-        usage: "true"
+        usage: "false"
         condition: ["down"]
         cmd-action: "None"
       app_memory:
-        usage: "true"
+        usage: "false"
         condition: ["less", 40]
         cmd-action: "None"
     OS:
       os_agent_info:
-        usage: "true"
+        usage: "false"
         condition: ["down"]
         cmd-action: "None"
       os_proc_value:
-        usage: "true"
+        usage: "false"
         condition: ["less", 40]
         cmd-action: "None"
       os_cpu_load:
-        usage: "true"
+        usage: "false"
         condition: ["less", 40]
         cmd-action: "None"
       os_cpu_usage:
         usage: "true"
-        condition: ["less", 40]
+        condition: ["greater", 0]
         cmd-action: "None"
