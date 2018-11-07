@@ -42,7 +42,7 @@ def monitoring_manager(encoded_data):
             data.append(encoded_data['Host_ID'])
         conf['vitrage_conf_policy']['vm_id'] = data
         conf['vitrage_conf_policy']['vm_interface'] = encoded_data['Host_Interface_Name']
-        conf['vitrage_conf_policy']['host_type'] = 'nova.host'
+        conf['vitrage_conf_policy']['host_type'] = "nova.host"
 
     else:
         data = list()
@@ -60,7 +60,7 @@ def monitoring_manager(encoded_data):
             data.append(encoded_data['VM_ID'])
         conf['vitrage_conf_policy']['vm_id'] = data
         conf['vitrage_conf_policy']['vm_interface'] = encoded_data['VM_Interface_Name']
-        conf['vitrage_conf_policy']['host_type'] = 'nova.instance'
+        conf['vitrage_conf_policy']['host_type'] = "nova.instance"
 
     data = list()
     if ',' in encoded_data['Zabbix_Host_Name']:
@@ -69,8 +69,6 @@ def monitoring_manager(encoded_data):
         data.append(encoded_data['Zabbix_Host_Name'])
     conf['vitrage_conf_policy']['host_name'] = data
     conf['app_monitoring_policy']['host_name'] = data
-
-    conf['vitrage_conf_policy']['host_type'] = encoded_data['Zabbix_Host_Type']
 
     #parse monitoring manager
     conf['app_monitoring_policy']['name'] = 'zabbix'

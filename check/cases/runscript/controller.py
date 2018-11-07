@@ -2,10 +2,10 @@ from check.cases.base_controller import BaseController
 from ssh_manager import listener
 from check.cases.runscript import parser
 
-class Client(BaseController):
+class Client():
 
     def __init__(self):
-        self.pars = parser.RunscriptParser()
+        pass
 
     def separate_data(self,info):
         print(data)
@@ -13,11 +13,13 @@ class Client(BaseController):
     def execute(self, data):
         # separate_data(data)
         print("Start Execute")
-        hosts = data[0]
-        auth = data[1]
-        local_script = data[2]
-        remote_script = data[3]
-        file_name = "test_script"
+        print("DATA",data)
+        hosts = []
+        hosts.append('192.168.11.11')
+        auth = ['root','root']
+        local_script = '/opt/stack'
+        remote_script = '/opt/stack/path'
+        file_name = "cpu.sh"
         result = listener.start_script(hosts, auth, file_name,local_script,remote_script)
         print("===================================================================")
         print(result)

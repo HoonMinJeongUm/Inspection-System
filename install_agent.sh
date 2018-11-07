@@ -6,9 +6,9 @@ sudo apt-get -y install zabbix-agent
 sudo apt-get -y install apache2
 
 
-sudo sed -i "2s/.*/`ifconfig [VM Interface] | grep "inet addr:"| cut -d: -f2 | awk "{ print $1 }"`/g" "/etc/hosts"
+sudo sed -i "2s/.*/`ifconfig eth0 | grep "inet addr:"| cut -d: -f2 | awk "{ print $1 }"`/g" "/etc/hosts"
 sudo sed -i "s/Bcast/`cat /etc/hostname`/g" "/etc/hosts"
-sudo sed -i "3s/.*/192.168.11.11\	monitor/g" "/etc/hosts"
+sudo sed -i "3s/.*/192.168.11.61\	monitor/g" "/etc/hosts"
 sudo /etc/init.d/networking restart
 sudo echo "zabbix ALL=NOPASSWD: ALL" >> /etc/sudoers
 

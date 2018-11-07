@@ -76,22 +76,12 @@ class VitrageconfManager(object):
 
     def start_config(self):
         # add zabbix to list of datasources in /etc/vitrage/vitrage.conf
-        #subprocess.call(['sed', "-i", "20s/nova.host/zabbix,nova.host/g", self.vitrage_conf])
-	subprocess.call(['sed', "-i", "20s/types = nova.host/types = zabbix,nova.host/g", self.vitrage_conf])
-        
-
-	# add texts to vitrage_conf file
-        #subprocess.call("echo '[zabbix]' >> '%s'" % self.vitrage_conf, shell=True)
-        #subprocess.call("echo 'url = http://'%s'/zabbix' >> '%s'" % (self.server_ip, self.vitrage_conf), shell=True)
-        #subprocess.call("echo 'password = '%s'' >> '%s'" % (self.server_pass, self.vitrage_conf), shell=True)
-        #subprocess.call("echo 'user = '%s'' >> '%s'" % (self.server_user, self.vitrage_conf), shell=True)
-        #subprocess.call("echo 'config_file = /etc/vitrage/zabbix_conf.yaml' >> '%s'" % self.vitrage_conf, shell=True)
-	subprocess.call(['sed', "-i", "35s/.*/[zabbix]/g", self.vitrage_conf])
-	subprocess.call(['sed', "-i", "36s/.*/url = http:\/\/%s\/zabbix/g" %self.server_ip, self.vitrage_conf])
-	subprocess.call(['sed', "-i", "37s/.*/password = %s/g" % self.server_pass, self.vitrage_conf])
-	subprocess.call(['sed', "-i", "38s/.*/user = %s/g" % self.server_user, self.vitrage_conf])
-	subprocess.call(['sed', "-i", "39s/.*/config_file = \/etc\/vitrage\/zabbix_conf.yaml/g" , self.vitrage_conf])
-        # make zabbix_conf.yaml file and add texts
+        subprocess.call(['sed', "-i", "20s/types = nova.host/types = zabbix,nova.host/g", self.vitrage_conf])
+        subprocess.call(['sed', "-i", "35s/.*/[zabbix]/g", self.vitrage_conf])
+        subprocess.call(['sed', "-i", "36s/.*/url = http:\/\/%s\/zabbix/g" %self.server_ip, self.vitrage_conf])
+        subprocess.call(['sed', "-i", "37s/.*/password = %s/g" % self.server_pass, self.vitrage_conf])
+        subprocess.call(['sed', "-i", "38s/.*/user = %s/g" % self.server_user, self.vitrage_conf])
+        subprocess.call(['sed', "-i", "39s/.*/config_file = \/etc\/vitrage\/zabbix_conf.yaml/g" , self.vitrage_conf])
 
         if os.path.exists("%s" % self.zabbix_conf):
             pass
@@ -103,16 +93,17 @@ class VitrageconfManager(object):
             subprocess.call("echo '- zabbix_host: '%s'' >> '%s'" % (self.host_name[number], self.zabbix_conf), shell=True)
             subprocess.call("echo '  type: '%s'' >> '%s'" % (self.host_type, self.zabbix_conf), shell=True)
             subprocess.call("echo '  name: '%s'' >> '%s'" % (self.vm_id[number], self.zabbix_conf), shell=True)
+        print("=================================================================")
+        print("            Waiting For agent<->server connection                ")
+        print("=================================================================")
+        time.sleep(40)
+        print("=================================================================")
+        print("                  Restarting Vitrage-Service                     ")
+        print("=================================================================")
+        subprocess.call('sudo systemctl restart devstack@vitrage-collector.service', shell=True)
+        subprocess.call('sudo systemctl restart devstack@vitrage-graph.service', shell=True)
 
-	print("=================================================================")
-	print("            Waiting For agent<->server connection                ")
-	print("=================================================================")
-	time.sleep(40)
-    print("=================================================================")
-    print("            Starting For Restart Vitrage-Service                  ")
-    print("=================================================================")
-    subprocess.call('sudo systemctl restart devstack@vitrage-collector.service', shell=True)
-    subprocess.call('sudo systemctl restart devstack@vitrage-graph.service', shell=True)
+
 
     def start_script(self):
         self.decode()
@@ -122,7 +113,7 @@ class VitrageconfManager(object):
             print("=================================================================")
             for number in range(0, len(self.vm_ip)):
                 self.make_script(number)
-                if self.host_type == 'nova.host':
+                if self.host_type == "nova.host":
                     print("This VM is Host")
                     listener.start_script([self.vm_ip[number]], ['root','root'], "install_agent.sh", self.path_script,
                                           "/home/ubuntu")

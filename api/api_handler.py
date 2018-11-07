@@ -22,4 +22,5 @@ def start_action(action,data):
         	case_manager.call_case(encoded_data['case'],encoded_data)
     	elif action == 'Monitoring':
             data = monitoring_manager(encoded_data)
-            MonitoringCaseManager(data)		   
+            MonitoringCaseManager(data)		    
+
